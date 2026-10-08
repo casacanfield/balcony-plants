@@ -1,0 +1,1764 @@
+<title>Balcony Plant Cards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,600..900,100&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,500;1,600&display=swap">
+<style>
+/* Layout: one flowing column per plant. Big soft header, two sketched plates floating on color washes, care notes flowing in two loose columns, then a pruning pool with snip sketches and the four seasons. Color = topic, no boxes or chips. */
+:root {
+  --bg: #f1f4ee;
+  --ink: #1f2b24;
+  --muted: #5b6b61;
+  --leaf: #2f6b45;
+  --pool: #e0efe9;
+
+  --water: #2a6aa8;   --water-bg: #dbe9f6;
+  --sun: #a06200;     --sun-bg: #f8e8c6;
+  --soil: #7a4f2c;    --soil-bg: #eedfd1;
+  --friend: #2c7539;  --friend-bg: #dcefd9;
+  --foe: #b2363a;     --foe-bg: #f6dcd9;
+  --pink: #c4508a;
+  --yellow: #e8b923;
+  --feed: #6a46a6;    --feed-bg: #e7def6;
+  --prune: #217370;
+
+  --f-display: "Fraunces", "Georgia", serif;
+  --f-body: "Nunito", "Trebuchet MS", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141a16; --ink: #e8efe9; --muted: #a2b3a7; --leaf: #86c99c; --pool: #16292a;
+    --water: #93c3f0; --water-bg: #1b2d40; --sun: #f1c46f; --sun-bg: #3a2d12; --soil: #dcb08a; --soil-bg: #33261c;
+    --friend: #93d79e; --friend-bg: #1a3322; --foe: #f29d95; --foe-bg: #3d1f1e; --feed: #c6abf3; --pink: #ec94c2; --yellow: #f2cf55; --feed-bg: #2b2240; --prune: #82d6d0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141a16; --ink: #e8efe9; --muted: #a2b3a7; --leaf: #86c99c; --pool: #16292a;
+  --water: #93c3f0; --water-bg: #1b2d40; --sun: #f1c46f; --sun-bg: #3a2d12; --soil: #dcb08a; --soil-bg: #33261c;
+  --friend: #93d79e; --friend-bg: #1a3322; --foe: #f29d95; --foe-bg: #3d1f1e; --feed: #c6abf3; --pink: #ec94c2; --yellow: #f2cf55; --feed-bg: #2b2240; --prune: #82d6d0;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 1.08rem; line-height: 1.6;
+  padding-inline: 18px; padding-block: 26px 56px;
+}
+.wrap { max-width: 780px; margin: 0 auto; display: grid; gap: 30px; }
+h1, h2, h3, .display { font-family: var(--f-display); font-variation-settings: "SOFT" 100, "WONK" 0; }
+
+.head { display: grid; gap: 4px; }
+.where { font-style: italic; font-weight: 600; color: var(--leaf); }
+h1 { margin: 0; font-weight: 800; font-size: clamp(2.5rem, 10vw, 4rem); line-height: 1.02; letter-spacing: -.005em; text-wrap: balance; }
+.sci { margin: 0; font-style: italic; color: var(--muted); font-size: 1.2rem; }
+
+.pics { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: end; }
+.pics.single { grid-template-columns: minmax(0, 460px); justify-content: center; }
+.pic { margin: 0; display: grid; gap: 2px; min-width: 0; justify-items: center; text-align: center; }
+.pic svg, .snip svg { width: 100%; height: auto; display: block; max-width: 100%; }
+.pic figcaption { font-family: var(--f-display); font-weight: 700; font-size: 1.15rem; font-variation-settings: "SOFT" 100; }
+.pic figcaption span { display: block; font-family: var(--f-body); font-weight: 500; font-style: italic; font-size: .92rem; color: var(--muted); }
+
+.wave { width: 100%; height: 22px; display: block; color: var(--leaf); opacity: .5; }
+
+.care { columns: 2 300px; column-gap: 40px; }
+.note { break-inside: avoid; display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 4px 14px; margin-bottom: 28px; }
+.note .ico { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 48% 52% 44% 56% / 55% 45% 55% 45%; background: var(--c-bg); color: var(--c); }
+.note .ico svg { width: 28px; height: 28px; filter: url(#sketch-sm); }
+.note .body { min-width: 0; display: grid; gap: 4px; }
+.note h2 { margin: 0; font-size: 1.3rem; font-weight: 800; color: var(--c); line-height: 1.1; }
+.note h2 .swash { display: block; width: 92px; height: 9px; margin-top: 2px; }
+.note p { margin: 0; }
+.note .lead { font-family: var(--f-display); font-weight: 700; font-size: 1.32rem; line-height: 1.2; font-variation-settings: "SOFT" 100; }
+.note .sign { font-weight: 600; }
+.note .sign::before { content: "↳ "; color: var(--c); font-weight: 800; }
+.mix b { font-weight: 800; }
+.mix .plus { color: var(--c); font-family: var(--f-display); font-weight: 900; padding-inline: 3px; }
+.yes { font-family: var(--f-display); font-weight: 900; font-size: 1.6rem; color: var(--c); margin-right: 6px; line-height: 1; }
+.n-water  { --c: var(--water);  --c-bg: var(--water-bg); }
+.n-sun    { --c: var(--sun);    --c-bg: var(--sun-bg); }
+.n-soil   { --c: var(--soil);   --c-bg: var(--soil-bg); }
+.n-friend { --c: var(--friend); --c-bg: var(--friend-bg); }
+.n-foe    { --c: var(--foe);    --c-bg: var(--foe-bg); }
+.n-feed   { --c: var(--feed);   --c-bg: var(--feed-bg); }
+
+.prune { background: var(--pool); border-radius: 46px 110px 52px 90px / 60px 70px 80px 50px; padding: 28px 24px 30px; display: grid; gap: 18px; }
+.prune h2 { margin: 0; color: var(--prune); font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+.prune h2 svg { width: 30px; height: 30px; filter: url(#sketch-sm); }
+.how { margin: 0; font-family: var(--f-display); font-weight: 600; font-size: 1.28rem; line-height: 1.35; max-width: 38ch; font-variation-settings: "SOFT" 100; }
+.snips { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; align-items: end; }
+.snips:has(> .snip:only-child) { grid-template-columns: minmax(0, 420px); }
+.seasons { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+.season { min-width: 0; }
+.season h3 { margin: 0 0 4px; font-size: 1.2rem; font-weight: 800; color: var(--prune); position: relative; display: inline-block; }
+.season h3 .ring { position: absolute; left: -12px; top: -8px; width: calc(100% + 24px); height: calc(100% + 16px); overflow: visible; pointer-events: none; filter: url(#sketch-sm); }
+.season small { display: block; margin: 2px 0 4px; font-family: var(--f-body); font-style: italic; font-weight: 600; font-size: .8rem; color: var(--muted); }
+.season p { margin: 0; font-size: 1rem; }
+
+.foot { color: var(--muted); font-size: 1rem; font-weight: 700; }
+.back { justify-self: start; font-weight: 800; color: var(--leaf); text-decoration: none; font-size: 1.05rem; margin-bottom: -18px; }
+.back:hover { text-decoration: underline wavy; text-underline-offset: 5px; }
+a { color: inherit; }
+a:focus-visible { outline: 3px solid var(--leaf); outline-offset: 3px; border-radius: 6px; }
+.index { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px 18px; }
+.index a { text-decoration: none; display: grid; gap: 2px; justify-items: center; text-align: center; min-width: 0; }
+.index .names { display: grid; gap: 2px; min-width: 0; }
+.views { display: flex; align-items: baseline; gap: 10px; color: var(--muted); font-family: var(--f-display); font-size: 1.1rem; }
+.filters { display: grid; gap: 8px; }
+.views { flex-wrap: wrap; }
+.vlabel { font-family: var(--f-body); font-size: .8rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); min-width: 5.6em; }
+.viewbtn { font: inherit; font-weight: 700; color: var(--muted); background: none; border: 0; padding: 2px 0; cursor: pointer; text-decoration: none; }
+.viewbtn.on { color: var(--ink); text-decoration: underline wavy var(--leaf); text-underline-offset: 6px; text-decoration-thickness: 2px; }
+.viewbtn:focus-visible { outline: 3px solid var(--leaf); outline-offset: 3px; border-radius: 6px; }
+.index.as-list { grid-template-columns: 1fr; gap: 6px; }
+.index.as-list a { grid-template-columns: 72px minmax(0, 1fr); align-items: center; justify-items: start; text-align: left; gap: 14px; padding-block: 4px; }
+.index.as-list .thumb { width: 72px; }
+.index.as-list b { font-size: 1.2rem; }
+.index.as-list .names { gap: 0; }
+.index .thumb { width: 100%; max-width: 190px; display: block; transition: transform .25s ease; }
+.viewbtn .dot { display: inline-block; width: .7em; height: .7em; border-radius: 50%; margin-right: .3em; vertical-align: -.05em; border: 1px solid var(--muted); }
+.index .thumb svg { width: 100%; height: auto; display: block; }
+.index a:hover .thumb { transform: rotate(-2deg) scale(1.03); }
+.index b { font-family: var(--f-display); font-size: 1.3rem; font-weight: 800; line-height: 1.15; font-variation-settings: "SOFT" 100; }
+.index i { color: var(--muted); font-size: .95rem; }
+.index small { color: var(--leaf); font-weight: 600; font-size: .85rem; }
+@media (prefers-reduced-motion: reduce) { .index .thumb { transition: none; } }
+
+@media (max-width: 640px) {
+  .vlabel { flex-basis: 100%; margin-bottom: -6px; }
+  .filters { gap: 12px; }
+  .pics, .snips { grid-template-columns: 1fr; }
+  .seasons { grid-template-columns: 1fr 1fr; }
+  .prune { padding: 24px 18px 26px; border-radius: 36px 70px 40px 60px / 44px 50px 60px 40px; }
+}
+@media (max-width: 380px) { .seasons { grid-template-columns: 1fr; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="sketch-sm" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".06" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6"/></filter>
+</svg>
+
+<main class="wrap" id="app"></main>
+
+<script>
+const PLANTS = {
+  hydrangea: {
+    kind: "pretty",
+    common: "Bigleaf Hydrangea",
+    sci: "Hydrangea macrophylla",
+    where: "East balcony · morning sun",
+    art: { bloom: "hydrangeaBloom", rest: "hydrangeaRest" },
+    bloomNote: "Summer: big round heads",
+    restNote: "Winter: bare stems, fat buds",
+    water: { big: "Thirsty", text: "Soak it whenever the top knuckle of soil is dry. Never let the pot dry out, even in winter.", signs: ["Droopy and the soil is dry? Give it a big soak.", "Droopy but the soil is wet? Leave it alone."] },
+    sun: { big: "Morning sun, afternoon shade", text: "The east balcony suits it.", signs: ["Crispy brown leaf edges mean it got too dry or too much sun."] },
+    soil: { mix: ["all-purpose soil", "a good handful of earthworm humus", "a small pour of perlite"], text: "It holds water without going soggy." },
+    friends: "Shade lovers with shallow roots, like ferns, hostas, heuchera, impatiens or ivy trailing over the edge.",
+    foes: "Dry-loving plants like lavender, rosemary, thyme, sage and succulents.",
+    feed: { big: "Once a year.", text: "In spring, scratch a good handful of earthworm humus into the top of the soil. That's all it needs." },
+    pruneArt: [["hydrangeaSnipSummer", "Summer"], ["hydrangeaSnipSpring", "Spring"]],
+    pruneHow: "Clean snips just above a pair of fat buds. Never a hard chop: it flowers from last year's stems.",
+    seasons: {
+      spring: "Snip each old dried head down to the first fat buds. Cut out stems that are brown and dry all the way down, and lay the pieces on the soil to rot in.",
+      summer: "When a flower fades, or for a vase, snip just above the first pair of full-size leaves below it. Stay high, the lower buds are next year's flowers.",
+      fall: "No cutting. Next year's buds are already forming.",
+      winter: "Leave the dried heads on. They shield the buds from frost and give tiny insects a place to spend the winter.",
+    },
+  },
+  heather: {
+    kind: "pretty",
+    common: "Heather",
+    sci: "Calluna vulgaris",
+    where: "East balcony · morning sun",
+    art: { bloom: "heatherBloom", rest: "heatherRest" },
+    bloomNote: "Late summer to fall: spikes of tiny bells",
+    restNote: "Evergreen, old flowers dry papery",
+    water: { big: "Damp, never dry", text: "Tap water is fine. Keep the soil evenly damp, but never sitting in a puddle. Once it dries out completely it won't bounce back.", signs: ["Leaves yellowing? Scratch fresh ericaceous compost into the top, or add a small splash of vinegar to the watering can.", "Grey, brittle patches? It dried out. Water a little sooner next time."] },
+    sun: { big: "As much as it can get", text: "More sun means more flowers, but the east balcony is fine.", signs: ["Leggy with few flowers? It wants more sun."] },
+    soil: { mix: ["ericaceous compost", "a small pour of perlite"], text: "Nothing else. It needs acid soil." },
+    friends: "Your other heather. Also other acid-soil lovers like small azaleas, blueberries, ferns or wintergreen.",
+    foes: "The hydrangea, which hogs the water and shades it out. Also anything that wants regular, non-acid soil: lavender, rosemary, thyme, most vegetables, succulents and bromeliads.",
+    feed: { big: "No.", text: "It likes poor soil, and feeding makes it floppy. Just scratch fresh ericaceous compost into the top each spring to keep the soil acid." },
+    pruneArt: [["heatherSnipSpring", "Spring"]],
+    pruneHow: "A light haircut with scissors, just below the faded flowers. Never cut into bare brown wood, because it won't regrow from there.",
+    seasons: {
+      spring: "Trim off last year's faded flower spikes, staying in the green leafy part. Let the clippings fall on the soil.",
+      summer: "Leave it. The flower buds are forming.",
+      fall: "Leave it to flower. Late bees and hoverflies feed on it when little else is blooming.",
+      winter: "Leave the papery old flowers on for color.",
+    },
+  },
+  urnplant: {
+    kind: "pretty",
+    common: "Urn Plant",
+    sci: "Aechmea fasciata",
+    where: "East balcony · morning sun",
+    art: { bloom: "urnBloom", rest: "urnRest" },
+    bloomNote: "Flowers once: a spiky pink head",
+    restNote: "After flowering: mom fades, babies grow",
+    water: { big: "Soak, then let it dry", text: "Pour over the whole plant so the cup fills and the soil soaks until water runs out the bottom. Let the soil go nearly dry before the next soak. Tap water is fine.", signs: ["Every few weeks, tip the cup out and refill it so the water doesn't go stale."] },
+    sun: { big: "Bright, gentle light", text: "Morning sun is perfect, so the east balcony suits it.", signs: ["Pale, bleached patches mean too much sun."] },
+    soil: { mix: ["succulent soil", "a good pour of perlite"], text: "Use a small pot. The roots mostly just hold it in place." },
+    friends: "Its own babies, the flaming sword or other bromeliads. Also air plants tucked on top, or small succulents that like the same dry mix.",
+    foes: "Anything that likes wet or rich soil, like the hydrangea, heather, ferns, vegetables and most herbs. Their roots would rot.",
+    feed: { big: "No.", text: "It doesn't need it." },
+    pruneArt: [["urnSnipMom", "Spring"]],
+    pruneHow: "Clean scissors, cut close to the base. Each rosette flowers once, then the mom slowly fades and her babies take over.",
+    seasons: {
+      spring: "Do the bigger cuts. Once mom is mostly brown, cut her off at the base and leave the babies. Keep them as a clump, or cut one off with some root once it's about a third of mom's size and pot it alone.",
+      summer: "Leave dry, brown leaves on unless they bother you. Small bugs hide in them.",
+      fall: "Cut the old flower stalk off at the base once it's dry.",
+      winter: "Leave it alone.",
+    },
+  },
+  inchplant: {
+    kind: "pretty",
+    common: "Inch Plant",
+    sci: "Tradescantia zebrina",
+    where: "East balcony · morning sun",
+    art: { bloom: "inchBloom", rest: "inchRest" },
+    bloomNote: "Small three-petal pink flowers at the tips",
+    restNote: "Silver-striped leaves all year",
+    water: { big: "Let the top dry, then soak", text: "Soak it when the top knuckle of soil is dry. It handles going dry much better than staying wet.", signs: ["Mushy stems at the base? It's too wet. Let it dry out longer."] },
+    sun: { big: "Bright, gentle light", text: "Morning sun is right, so the east balcony suits it. Harsh afternoon sun bleaches the stripes.", signs: ["Stripes fading and stems stretching? It needs more light.", "Crispy brown leaves? Too much sun, or it went too dry."] },
+    soil: { mix: ["all-purpose soil", "a small pour of perlite"], text: "Nothing fancy." },
+    friends: "The spider plant or pothos, or other easy trailers like purple heart, string of hearts or creeping Jenny. They like the same watering.",
+    foes: "Anything that likes soggy or acid soil, like the hydrangea, heather or ferns. Also succulents and cacti, which want it much drier.",
+    feed: { big: "No.", text: "It already grows well." },
+    pruneArt: [["inchSnip", "Any time"]],
+    pruneHow: "Snip just above a leaf joint and it branches into two right there, getting bushier. Every cutting roots in a glass of water.",
+    seasons: {
+      spring: "Cut leggy stems back by half. Anything the frost killed can stay on the soil to rot in, since it regrows from the roots.",
+      summer: "Pinch off long tips to keep it full.",
+      fall: "Trim stems that flop over.",
+      winter: "Leave it alone.",
+    },
+  },
+  spiderplant: {
+    kind: "pretty",
+    common: "Spider Plant",
+    sci: "Chlorophytum comosum",
+    where: "East balcony · morning sun",
+    art: { bloom: "spiderBloom", rest: "spiderRest" },
+    bloomNote: "Little white stars on long runners",
+    restNote: "Babies dangle from the runners",
+    water: { big: "Let the top dry, then soak", text: "Soak it when the top knuckle of soil is dry. Its thick roots store water, so it forgives forgetting." },
+    sun: { big: "Bright, gentle light", text: "Morning sun is right, so the east balcony suits it." },
+    soil: { mix: ["all-purpose soil", "a small pour of perlite"], text: "Nothing fancy." },
+    friends: "The inch plant or pothos, or other easy leafy plants like peace lily, prayer plant, ferns or ivy.",
+    foes: "Anything that likes soggy or acid soil, like the hydrangea, heather or ferns. Also succulents and cacti, which want it much drier.",
+    feed: { big: "No.", text: "It doesn't need it." },
+    pruneArt: [["spiderSnip", "Any time"]],
+    pruneHow: "Cut whole leaves off at the base, never halfway. The babies hang off long runners: snip a runner near mom to pot a baby, or just leave them dangling.",
+    seasons: {
+      spring: "Cut brown or frost-hit leaves off at the base and leave them on the soil. Pot any babies you want.",
+      summer: "Trim runners only if mom's center looks pale or thin, or they're in your way.",
+      fall: "Leave it alone.",
+      winter: "Leave it alone.",
+    },
+  },
+  pothos: {
+    kind: "pretty",
+    common: "Pothos",
+    sci: "Epipremnum aureum",
+    where: "East balcony · morning sun",
+    art: { bloom: "pothosVine" },
+    bloomTitle: "What it looks like",
+    bloomNote: "Trailing vines; it almost never flowers in a pot",
+    water: { big: "Let it dry a bit, then soak", text: "Soak it when the top two knuckles of soil are dry. It droops a little when thirsty and perks right back up." },
+    sun: { big: "Bright, gentle light", text: "The east balcony is fine. Harsh sun yellows the leaves." },
+    soil: { mix: ["all-purpose soil", "a small pour of perlite"], text: "Nothing fancy." },
+    friends: "The Swiss cheese vine, spider plant or inch plant. Also philodendron, peace lily or ivy.",
+    foes: "Anything that likes soggy or acid soil, like the hydrangea, heather or ferns. Also succulents and cacti, which want it much drier.",
+    feed: { big: "No.", text: "It doesn't need it." },
+    pruneArt: [["pothosSnip", "Spring"]],
+    pruneHow: "Snip just above a leaf joint, where the little brown root bump is. Cuttings root in water, or poke them straight back into the same pot to make it fuller.",
+    seasons: {
+      spring: "Cut leggy vines back by a third. Leave frost-hit leaves on the soil to rot in.",
+      summer: "Trim vines that get too long.",
+      fall: "Leave it alone.",
+      winter: "Leave it alone.",
+    },
+  },
+  tomato: {
+    kind: "food",
+    common: "Tomato",
+    sci: "Solanum lycopersicum",
+    where: "West balcony · full sun",
+    art: { bloom: "tomatoBloom", rest: "tomatoYoung" },
+    bloomNote: "Yellow star flowers, then fruit",
+    restTitle: "Young plant",
+    restNote: "Spring: fuzzy, toothed leaves",
+    water: { big: "Thirsty, and steady", text: "Give it a deep soak whenever the top knuckle is dry. In summer heat that can be daily. Swinging between bone dry and soaked cracks the fruit." },
+    sun: { big: "As much as it can get", text: "The west balcony is right." },
+    soil: { mix: ["vegetable soil", "a good handful of earthworm humus"], text: "In a big pot, like your 50L." },
+    friends: "The basil, green onions and pepper already in its pot. Also chives, parsley, marigolds, nasturtiums, borage or lettuce at its feet.",
+    foes: "Big, hungry plants like the cannabis, corn, squash or pumpkins. Potatoes and eggplant, which share its diseases. Fennel, which slows its growth. Cabbage-family plants like broccoli and cauliflower.",
+    feed: { big: "Twice.", text: "A handful of earthworm humus at planting, and another when the first little tomatoes appear. Optional boost: half the label dose of the liquid feed in the watering can every couple of weeks while fruit is forming." },
+    pruneArt: [["tomatoSnip", "Fall"]],
+    pruneHow: "Let it grow however it wants. The only cut is at the end of the season.",
+    seasons: {
+      spring: "Nothing to cut.",
+      summer: "Nothing to cut.",
+      fall: "Once it stops fruiting, cut it at soil level and leave the roots in the pot to feed the soil.",
+      winter: "Nothing. It only lives one season.",
+    },
+  },
+  basil: {
+    kind: "food",
+    common: "Basil",
+    sci: "Ocimum basilicum",
+    where: "West balcony · full sun",
+    art: { bloom: "basilBloom", rest: "basilLeafy" },
+    bloomNote: "Spikes of small white flowers",
+    restTitle: "Leafy",
+    restNote: "Soft, glossy, rounded leaves in pairs",
+    water: { big: "Watered with its pot-mates", text: "It wilts fast when dry and bounces back after a soak." },
+    sun: { big: "Full sun", text: "The west balcony is right." },
+    soil: { mix: ["whatever its pot has"], text: "It's happy in the tomato's vegetable soil and humus." },
+    friends: "The tomato, peppers, green onions, cannabis and ginger. Also parsley, chives, marigolds, nasturtiums or lettuce.",
+    foes: "Rosemary, lavender, thyme or sage, which want it much drier. Also fennel.",
+    feed: { big: "No.", text: "It feeds off what the tomato gets." },
+    pruneArt: [["basilSnip", "Summer"]],
+    pruneHow: "Nothing beyond picking it to eat. Pinch from the top, just above a pair of leaves, and it bushes out. Let it flower, because hoverflies and bees love basil flowers.",
+    seasons: {
+      spring: "Nothing to cut.",
+      summer: "Pick from the top to eat. Let some stems flower.",
+      fall: "Leave the flower spikes on until they turn brown and dry. Then snip them and rub them over a bowl to collect the small black seeds.",
+      winter: "Nothing. It only lives one season.",
+    },
+  },
+  flamingsword: {
+    kind: "pretty",
+    common: "Flaming Sword",
+    sci: "Vriesea",
+    where: "East balcony · morning sun",
+    art: { bloom: "swordBloom", rest: "swordRest" },
+    bloomNote: "Flowers once: a flat yellow sword",
+    restNote: "After flowering: mom fades, babies grow",
+    water: { big: "Soak, then let it dry", text: "Pour over the whole plant so the cup fills and the soil soaks through. Let the soil go nearly dry before the next soak. Refresh the cup every few weeks." },
+    sun: { big: "Soft morning light", text: "Its thinner leaves scorch in hot sun, so the east balcony is right." },
+    soil: { mix: ["succulent soil", "a good pour of perlite"], text: "Use a small pot." },
+    friends: "Its own babies or the urn plant, or other bromeliads. Also air plants tucked on top, or small succulents that like the same dry mix.",
+    foes: "Anything that likes wet or rich soil, like the hydrangea, heather, ferns, vegetables and most herbs. Their roots would rot.",
+    feed: { big: "No.", text: "It doesn't need it." },
+    pruneArt: [["urnSnipMom", "Spring"]],
+    pruneHow: "Clean scissors, cut close to the base. Each rosette flowers once, then the mom slowly fades and her babies take over.",
+    seasons: {
+      spring: "Once mom is mostly brown, cut her off at the base and leave the babies.",
+      summer: "Nothing to cut.",
+      fall: "Cut the old flower stalk off at the base once it's dry.",
+      winter: "Nothing to cut.",
+    },
+  },
+  pepper: {
+    kind: "food",
+    common: "Pepper",
+    sci: "Capsicum annuum",
+    where: "West balcony · full sun",
+    art: { bloom: "pepperBloom", rest: "pepperSeedling" },
+    bloomNote: "Small white flowers, then hanging peppers",
+    restTitle: "Seedling",
+    restNote: "Two seed leaves, then pointed true leaves",
+    water: { big: "Let the top dry, then soak", text: "Soak it when the top knuckle is dry. It likes it a touch drier than the tomato." },
+    sun: { big: "Full sun and warmth", text: "The west balcony is right." },
+    soil: { mix: ["vegetable soil", "a good handful of earthworm humus"], text: "Seedlings coming up this late may sit still until spring. That's normal." },
+    friends: "The tomato, basil and green onions. Also chives, parsley, marigolds, nasturtiums or carrots.",
+    foes: "Big, hungry plants like the cannabis, corn or squash. Potatoes and eggplant, which share its diseases. Also fennel.",
+    feed: { big: "Once.", text: "Scratch a handful of earthworm humus in when the first flowers show. Optional boost: half the label dose of the liquid feed in the watering can every couple of weeks while peppers are forming." },
+    pruneArt: [["pepperSnip", "Summer"]],
+    pruneHow: "No pruning. Pick peppers whenever they're the color you like, snipping rather than pulling so the branch doesn't snap.",
+    seasons: {
+      spring: "If it made it through winter, snip off any dead stems.",
+      summer: "Pick peppers whenever they're the color you like.",
+      fall: "Keep picking. Leave the plant outside, since peppers can live more than one year where winters are mild.",
+      winter: "Nothing to cut.",
+    },
+  },
+  strawberry: {
+    kind: "food",
+    common: "Strawberry",
+    sci: "Fragaria × ananassa",
+    where: "West balcony · full sun",
+    art: { bloom: "strawBloom", rest: "strawLeafy" },
+    bloomNote: "White flowers, then berries",
+    restTitle: "Leafy, with runners",
+    restNote: "Leaves in threes; runners make baby plants",
+    water: { big: "Let the top dry, then soak", text: "Soak it when the top knuckle is dry. The roots are shallow and the pot is wide and shallow, so it dries fast in summer." },
+    sun: { big: "Full sun", text: "More sun means more berries, so the west balcony is right." },
+    soil: { mix: ["vegetable soil", "a good handful of earthworm humus", "a small pour of perlite"], text: "It comes back every year in the same pot." },
+    friends: "The green onions and chives already there, whose smell helps keep pests off. Also thyme, borage, lettuce or marigolds.",
+    foes: "The tomato, peppers, potatoes or eggplant, which share a wilt disease. Cabbage-family plants like broccoli and cauliflower.",
+    feed: { big: "Once a year.", text: "Scratch a handful of earthworm humus in each spring. Optional boost: half the label dose of the liquid feed in the watering can every couple of weeks while berries are forming." },
+    pruneArt: [["strawSnip", "Any time"]],
+    pruneHow: "Let the runners root and fill the pot. Snip them only once the pot is full.",
+    seasons: {
+      spring: "Leave dead brown leaves where they fall. They rot into the soil like a forest floor.",
+      summer: "Let runners root. Snip them only if the pot is full.",
+      fall: "Nothing to cut.",
+      winter: "Nothing to cut.",
+    },
+  },
+  greenonion: {
+    kind: "food",
+    common: "Green Onion",
+    sci: "Allium fistulosum",
+    where: "West balcony · full sun",
+    art: { bloom: "onionBloom", rest: "onionLeafy" },
+    bloomNote: "Round balls of tiny cream flowers",
+    restTitle: "Leafy",
+    restNote: "Hollow tube leaves from slim white bases",
+    water: { big: "Nothing extra", text: "It drinks from whichever pot it's in. When you water the tomato or strawberry, it gets its share." },
+    sun: { big: "Full sun", text: "Full sun is fine, and it copes with some shade too." },
+    soil: { mix: ["whatever the pot already has"], text: "It's happy in the tomato's and strawberry's vegetable soil." },
+    friends: "Tomato, strawberry, pepper and basil, whose pests its smell helps keep off. Also carrots, lettuce, beets, parsley or chamomile.",
+    foes: "Beans and peas, since onions slow their growth. Also asparagus.",
+    feed: { big: "No.", text: "It feeds off what its pot-mates get." },
+    pruneArt: [["onionSnip", "Any time"]],
+    pruneHow: "Cut what you need a finger's width above the soil and it regrows from the base. If one flowers, leave the flower ball on for the hoverflies and bees.",
+    seasons: {
+      spring: "Cut what you want to eat.",
+      summer: "Leave any flower balls on for the hoverflies and bees.",
+      fall: "Cut what you want to eat.",
+      winter: "Leave it alone. It may die back and return in spring.",
+    },
+  },
+  monstera: {
+    kind: "pretty",
+    common: "Swiss Cheese Vine",
+    sci: "Monstera adansonii",
+    where: "East balcony · morning sun",
+    art: { bloom: "monsteraVine" },
+    bloomTitle: "What it looks like",
+    bloomNote: "Vines of holey leaves; it almost never flowers in a pot",
+    water: { big: "Let the top dry, then soak", text: "Soak it when the top knuckle of soil is dry." },
+    sun: { big: "Morning sun, then shade", text: "The east balcony suits it." },
+    soil: { mix: ["all-purpose soil", "a good pour of perlite"], text: "Airy, so the roots get air." },
+    friends: "The pothos, which likes the same care. Also philodendron, peace lily or ivy.",
+    foes: "Anything that likes soggy or acid soil, like the hydrangea, heather or ferns. Also succulents and cacti, which want it much drier.",
+    feed: { big: "Once a year.", text: "In spring, scratch a handful of earthworm humus into the top of the soil." },
+    pruneArt: [["monsteraSnip", "Any time"]],
+    pruneHow: "Snip just above a leaf joint, where the thin brown air root is, whenever it gets too long. Cuttings root in water, or poke them straight back into the same pot.",
+    seasons: {
+      spring: "Cut off leaves the cold turned brown and leave them on the soil to rot in.",
+      summer: "Snip vines that get too long.",
+      fall: "Leave it alone.",
+      winter: "Leave it alone.",
+    },
+  },
+  ginger: {
+    kind: "food",
+    common: "Ginger",
+    sci: "Zingiber officinale",
+    where: "East balcony · morning sun",
+    art: { bloom: "gingerPlant" },
+    bloomTitle: "What it looks like",
+    bloomNote: "Leafy stalks from a knobbly root; it rarely flowers in a pot",
+    water: { big: "Lightly moist in summer", text: "Keep it lightly moist while it's leafy. Once the leaves yellow in fall, barely water it until spring." },
+    sun: { big: "Morning sun, then shade", text: "The east balcony suits it." },
+    soil: { mix: ["all-purpose soil", "a good handful of earthworm humus", "a small pour of perlite"], text: "A shallow, wide pot is ideal, since the root spreads sideways." },
+    friends: "The two basil plants already there. Also turmeric, lemongrass, parsley or cilantro, which like the same moist, rich soil.",
+    foes: "Rosemary, lavender, thyme, sage and succulents, which want it much drier.",
+    feed: { big: "Once a year.", text: "In spring, scratch a handful of earthworm humus into the top of the soil." },
+    pruneArt: [["gingerSnip", "Harvest"]],
+    pruneHow: "No pruning. To harvest, break off a piece of root at the pot's edge and leave the rest to keep growing.",
+    seasons: {
+      spring: "Nothing to cut. New shoots come up from the root.",
+      summer: "Nothing to cut.",
+      fall: "Harvest a piece if you like. When the leaves die back, leave them on the soil.",
+      winter: "Leave it alone and keep it on the dry side.",
+    },
+  },
+  lavender: {
+    kind: "pretty",
+    common: "Lavender",
+    sci: "Lavandula",
+    where: "West balcony · full sun",
+    art: { bloom: "lavenderBloom", rest: "lavenderRest" },
+    bloomNote: "Purple spikes the bees love",
+    restTitle: "Out of bloom",
+    restNote: "A grey-green mound",
+    water: { big: "Let it dry out, then soak", text: "Let the pot dry out completely, then soak it. It hates wet feet." },
+    sun: { big: "Full sun", text: "The more sun the better, so the west balcony is right." },
+    soil: { mix: ["succulent soil", "a good pour of perlite"], text: "It likes lean soil, and the lime in your tap water actually suits it." },
+    friends: "Rosemary once your cuttings root, thyme, sage or oregano. Also small succulents like sedum, which like it just as dry.",
+    foes: "Thirsty or acid-soil plants like basil, tomato, strawberry, hydrangea, heather or ferns.",
+    feed: { big: "No.", text: "Rich soil makes it floppy." },
+    pruneArt: [["lavenderSnip", "Late summer"]],
+    pruneHow: "Once the bees are done with the flowers in late summer, cut off the old flower stalks plus a little of the leaves, about a third of the plant. Stay in the green leafy part, never into the woody grey stem, because it won't regrow from there.",
+    seasons: {
+      spring: "Nothing to cut.",
+      summer: "Leave the flowers for the bees. Once they fade, cut back by a third and let the clippings fall on the soil.",
+      fall: "Nothing to cut.",
+      winter: "Leave it alone and keep it on the dry side.",
+    },
+  },
+  starjasmine: {
+    kind: "pretty",
+    common: "Star Jasmine",
+    sci: "Trachelospermum jasminoides",
+    where: "West balcony · full sun",
+    art: { bloom: "jasmineBloom", rest: "jasmineRest" },
+    bloomNote: "White pinwheels; the scent peaks in the evening and draws moths and bees",
+    restTitle: "Out of bloom",
+    restNote: "Glossy and green all year",
+    water: { big: "Let the top dry, then soak", text: "Soak it when the top knuckle is dry. Water less in winter." },
+    sun: { big: "Full sun", text: "The west balcony is fine, and it also takes some shade." },
+    soil: { mix: ["all-purpose soil", "a good handful of earthworm humus", "a small pour of perlite"], text: "It stays in the same pot for years." },
+    friends: "Low, shallow plants at its feet, like sweet alyssum, nasturtiums, creeping Jenny, or spring bulbs such as crocus and grape hyacinth.",
+    foes: "Other strong climbers like the morning glory, which smother each other. Big, hungry plants like cannabis or tomato. Heather, which needs acid soil.",
+    feed: { big: "Once a year.", text: "In spring, scratch a handful of earthworm humus into the top of the soil." },
+    pruneArt: [["jasmineSnip", "Summer"]],
+    pruneHow: "None needed. Right after it flowers, snip stray shoots back to a leaf pair only if they're in the way, and let the clippings fall on the soil. The milky sap is sticky, so wash your hands after.",
+    seasons: {
+      spring: "Nothing to cut.",
+      summer: "Leave the flowers for the moths and bees. Afterward, snip stray shoots only if they're in the way.",
+      fall: "Nothing to cut.",
+      winter: "Leave it alone.",
+    },
+  },
+  morningglory: {
+    kind: "pretty",
+    common: "Morning Glory",
+    sci: "Ipomoea",
+    where: "West balcony · full sun",
+    art: { bloom: "mgBloom", rest: "mgRest" },
+    bloomNote: "Trumpets that open each morning",
+    restTitle: "Climbing",
+    restNote: "Heart-shaped leaves twining up",
+    water: { big: "Let the top dry, then soak", text: "Soak it when the top knuckle is dry." },
+    sun: { big: "Full sun", text: "More sun, more flowers." },
+    soil: { mix: ["all-purpose soil", "a small pour of perlite"], text: "Lean soil means more flowers." },
+    friends: "Low plants at its feet, like nasturtiums, sweet alyssum or marigolds.",
+    foes: "The star jasmine or other climbers, which it smothers. Also tomato, peppers or heather.",
+    feed: { big: "No.", text: "Rich soil gives leaves instead of flowers." },
+    pruneArt: [["mgWait", "This winter"]],
+    pruneHow: "No pruning. Leave it standing this winter as bug shelter. If it sprouts from the base in spring, it's the perennial blue dawn flower (Ipomoea indica). If nothing comes back, it was the annual (Ipomoea purpurea): pull the dead vine then, and keep any seedlings. The seeds aren't edible.",
+    seasons: {
+      spring: "Watch the base. New shoots mean perennial; nothing means annual, so pull the dead vine.",
+      summer: "Nothing to cut. Let it climb.",
+      fall: "Leave seed pods to dry on the vine so it can reseed.",
+      winter: "Leave it standing. Bugs shelter in it.",
+    },
+  },
+  succulents: {
+    kind: "pretty",
+    common: "Succulent Box",
+    sci: "Aeonium, Crassula, Graptopetalum, Gasteria, Haworthia",
+    where: "East balcony · morning sun",
+    art: { bloom: "succBox" },
+    bloomTitle: "Who lives here",
+    bloomNote: "Aeonium, pine tree crassula, ghost plant, ox tongue, zebra plant, plus one stretched rosette still to name",
+    water: { big: "Let it dry out, then soak", text: "Let the soil dry out completely, then soak. In winter, barely water." },
+    sun: { big: "Morning sun", text: "The east balcony is fine. A plant stretching tall is asking for more light." },
+    soil: { mix: ["succulent soil", "a good pour of perlite"], text: "What's in the box now is right." },
+    friends: "Each other, plus the bromeliads, houseleeks, sedums or small cacti.",
+    foes: "Thirsty plants like the hydrangea, heather, ferns, basil, tomato or strawberry.",
+    feed: { big: "No.", text: "They don't need it." },
+    pruneArt: [["succSnip", "Any time"]],
+    pruneHow: "No pruning. Let fallen leaves and broken bits root where they land, the way they spread in the wild.",
+    seasons: {
+      spring: "Nothing to cut.",
+      summer: "Leave flower stalks for the bees until they dry. An aeonium rosette dies after it flowers; its side shoots carry on.",
+      fall: "Snip dry flower stalks off at the base.",
+      winter: "Barely water. Leave them alone.",
+    },
+  },
+};
+// ---- Textbook-style plates: ink outlines with a light color wash, drawn from tokens so both themes work ----
+const INK = "var(--ink)";
+const f1 = n => n.toFixed(1);
+function rot(x, y, cx, cy, a) { const c = Math.cos(a), s = Math.sin(a); return [cx + (x * c - y * s), cy + (x * s + y * c)]; }
+// serrated broad leaf from base (bx,by) pointing at angle deg
+function leaf(bx, by, len, w, deg, teeth = 9) {
+  const a = deg * Math.PI / 180, L = [], R = [], n = teeth * 2;
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, half = w * Math.pow(Math.sin(Math.PI * Math.min(t * 1.08, 1)), .85) * (1 - .25 * t);
+    const tooth = t > .18 && t < .96 && i % 2 ? 1.9 : 0;
+    L.push(rot(t * len, -(half + tooth), bx, by, a)); R.push(rot(t * len, half + tooth, bx, by, a));
+  }
+  const pts = L.concat(R.reverse()).map(p => p.map(f1).join(" "));
+  const tip = rot(len, 0, bx, by, a);
+  let veins = "";
+  [.3, .5, .7].forEach(t => {
+    [-1, 1].forEach(sd => {
+      const p0 = rot(t * len, 0, bx, by, a), p1 = rot(t * len + w * .55, sd * w * .62 * (1 - .25 * t), bx, by, a);
+      veins += `<path d="M${f1(p0[0])} ${f1(p0[1])} L${f1(p1[0])} ${f1(p1[1])}" stroke="${INK}" stroke-width=".5" opacity=".6"/>`;
+    });
+  });
+  return `<path d="M${pts.join(" L")} Z" fill="var(--leaf)" fill-opacity=".28" stroke="${INK}" stroke-width=".9" stroke-linejoin="round"/>
+    <path d="M${f1(bx)} ${f1(by)} L${f1(tip[0])} ${f1(tip[1])}" stroke="${INK}" stroke-width=".7"/>${veins}`;
+}
+function floret(x, y, r, deg, fill, op = .45) {
+  let s = `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${deg})">`;
+  for (let k = 0; k < 4; k++) s += `<ellipse cx="0" cy="${f1(-r * .55)}" rx="${f1(r * .42)}" ry="${f1(r * .55)}" transform="rotate(${k * 90})" fill="${fill}" fill-opacity="${op}" stroke="${INK}" stroke-width=".45"/>`;
+  return s + `<circle r="${f1(r * .14)}" fill="${INK}"/></g>`;
+}
+function head(cx, cy, r, fillA, fillB, n = 44, op = .45) {
+  let s = "";
+  for (let i = n - 1; i >= 0; i--) {
+    const a = i * 2.39996, d = r * Math.sqrt((i + .5) / n);
+    s += floret(cx + Math.cos(a) * d, cy + Math.sin(a) * d * .78, r * .21, (i * 31) % 90, i % 3 ? fillA : fillB, op);
+  }
+  return s;
+}
+function bud(x, y, deg, size = 1) {
+  return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${deg}) scale(${size})"><path d="M0 0 C-4 -3 -4 -10 0 -14 C4 -10 4 -3 0 0 Z" fill="var(--leaf)" fill-opacity=".55" stroke="${INK}" stroke-width=".8"/><path d="M0 -1 L0 -11" stroke="${INK}" stroke-width=".4"/></g>`;
+}
+function stem(d, w = 2.4, color = "var(--leaf)") {
+  return `<path d="${d}" fill="none" stroke="${INK}" stroke-width="${w + 1.4}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${INK}" stroke-width=".5" stroke-linecap="round" transform="translate(1.2 .6)" opacity=".5"/><path d="${d}" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round"/>`;
+}
+// leader line + label (lines = array of strings)
+let BARE = false, WASH = null;
+function note(x1, y1, x2, y2, lines, anchor = "start") {
+  if (BARE) return "";
+  const dx = anchor === "start" ? 3 : -3;
+  return `<path d="M${x1} ${y1} L${x2} ${y2}" stroke="${INK}" stroke-width=".55" fill="none"/><circle cx="${x1}" cy="${y1}" r="1.5" fill="${INK}"/>
+    <text x="${x2 + dx}" y="${y2 - (lines.length - 1) * 5.2 + 3}" text-anchor="${anchor}" class="pl">${lines.map((l, i) => `<tspan x="${x2 + dx}" dy="${i ? 10.4 : 0}">${l}</tspan>`).join("")}</text>`;
+}
+function snip(x1, x2, y, lines, lx) {
+  return `<path d="M${x1} ${y} L${x2} ${y}" stroke="var(--foe)" stroke-width="1.6" stroke-dasharray="4 3"/>
+    <g transform="translate(${x2 + 4} ${y - 7}) scale(.6)" fill="none" stroke="var(--foe)" stroke-width="2.4" stroke-linecap="round"><circle cx="5" cy="19" r="4"/><circle cx="17" cy="19" r="4"/><path d="M7.5 16 L19 1 M14.5 16 L3 1"/></g>
+    <text x="${lx}" y="${y + 4}" class="pl snipl">${lines.map((l, i) => `<tspan x="${lx}" dy="${i ? 10.4 : 0}">${l}</tspan>`).join("")}</text>`;
+}
+function plate(vb, body, title, wash) {
+  if (BARE) body = body.replace(/<text[\s\S]*?<\/text>/g, "");
+  if (WASH) wash = WASH;
+  const [x, y, w, h] = vb.split(" ").map(Number), cx = x + w / 2, cy = y + h * .48;
+  const blob = wash ? `<path d="M${cx - w * .36} ${cy} C${cx - w * .4} ${cy - h * .38} ${cx + w * .12} ${cy - h * .46} ${cx + w * .32} ${cy - h * .26} C${cx + w * .48} ${cy - h * .06} ${cx + w * .38} ${cy + h * .38} ${cx + w * .04} ${cy + h * .4} C${cx - w * .26} ${cy + h * .42} ${cx - w * .34} ${cy + h * .2} ${cx - w * .36} ${cy} Z" fill="${wash}" opacity=".55"/>` : "";
+  return `<svg viewBox="${vb}" role="img" aria-label="${title}"><defs><filter id="sketch" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6"/></filter></defs><style>.pl{font:600 9.5px var(--f-body);fill:var(--ink)}.pl.snipl{fill:var(--foe);font-weight:800}.pt{font:italic 500 9px var(--f-body);fill:var(--muted)}</style>${blob}<g filter="url(#sketch)">${body.replace(/<text[\s\S]*?<\/text>/g, "")}</g>${(body.match(/<text[\s\S]*?<\/text>/g) || []).join("")}</svg>`;
+}
+
+// heather: curved wiry stems; scale leaves on the lower part, little bells hanging all along the upper part
+let _seed = 11;
+const rnd = () => ((_seed = (_seed * 16807) % 2147483647) / 2147483647);
+function qpt(p0, c, p1, t) {
+  const u = 1 - t;
+  return [u * u * p0[0] + 2 * u * t * c[0] + t * t * p1[0], u * u * p0[1] + 2 * u * t * c[1] + t * t * p1[1]];
+}
+function qtan(p0, c, p1, t) {
+  const dx = 2 * (1 - t) * (c[0] - p0[0]) + 2 * t * (p1[0] - c[0]), dy = 2 * (1 - t) * (c[1] - p0[1]) + 2 * t * (p1[1] - c[1]);
+  return Math.atan2(dy, dx);
+}
+function heatherStem(p0, p1, bend, fl, op, opt = {}) {
+  const mx = (p0[0] + p1[0]) / 2, my = (p0[1] + p1[1]) / 2, a = Math.atan2(p1[1] - p0[1], p1[0] - p0[0]);
+  const c = [mx + Math.cos(a + Math.PI / 2) * bend, my + Math.sin(a + Math.PI / 2) * bend];
+  const d = `M${f1(p0[0])} ${f1(p0[1])} Q${f1(c[0])} ${f1(c[1])} ${f1(p1[0])} ${f1(p1[1])}`;
+  let s = `<path d="${d}" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/><path d="${d}" fill="none" stroke="var(--soil)" stroke-width="1.3" stroke-linecap="round"/>`;
+  const leafFrom = opt.leafFrom ?? .14, flowerFrom = opt.flowerFrom ?? .55;
+  // scale leaves
+  if (opt.leaves !== false) for (let t = leafFrom, i = 0; t < (fl ? flowerFrom : .97); t += .036, i++) {
+    const [x, y] = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t), sd = i % 2 ? 1 : -1, L = 4 + rnd() * 1.6;
+    const lx = x + Math.cos(ta + sd * .45) * L, ly = y + Math.sin(ta + sd * .45) * L;
+    s += `<path d="M${f1(x)} ${f1(y)} L${f1(lx)} ${f1(ly)}" stroke="${INK}" stroke-width="2.7" stroke-linecap="round"/><path d="M${f1(x)} ${f1(y)} L${f1(lx)} ${f1(ly)}" stroke="var(--leaf)" stroke-width="1.5" stroke-linecap="round"/>`;
+  }
+  // bells, each on a tiny stalk off the stem
+  if (fl) for (let t = flowerFrom, i = 0; t < .97; t += (opt.step ?? .034), i++) {
+    const [x, y] = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t), sd = i % 2 ? 1 : -1;
+    const ang = ta + sd * 1.15, L = 3.2 + rnd();
+    const bx = x + Math.cos(ang) * L, by = y + Math.sin(ang) * L, r = 2.9 + rnd() * .8 - t * .6;
+    const deg = ang * 180 / Math.PI + 90;
+    s += `<path d="M${f1(x)} ${f1(y)} L${f1(bx)} ${f1(by)}" stroke="${INK}" stroke-width=".7"/>
+      <ellipse cx="${f1(bx + Math.cos(ang) * r * .8)}" cy="${f1(by + Math.sin(ang) * r * .8)}" rx="${f1(r)}" ry="${f1(r * 1.3)}" transform="rotate(${f1(deg)} ${f1(bx + Math.cos(ang) * r * .8)} ${f1(by + Math.sin(ang) * r * .8)})" fill="${fl}" fill-opacity="${op}" stroke="${INK}" stroke-width=".6"/>`;
+  }
+  return s;
+}
+function heatherBush(fl, op) {
+  _seed = 11;
+  const base = [150, 254];
+  const mains = [
+    [[150, 92], 10], [[124, 104], -14], [[178, 100], 16], [[100, 128], -20], [[200, 124], 22],
+    [[84, 162], -18], [[218, 158], 20], [[138, 96], 6], [[164, 98], -8],
+  ];
+  let s = "";
+  mains.forEach(([tip, bend], i) => {
+    const p0 = [base[0] + (i % 3 - 1) * 2, base[1]];
+    s += heatherStem(p0, tip, bend, fl[i % fl.length], op);
+    if (i < 7) { // a side twig off each main stem
+      const mx = (p0[0] + tip[0]) / 2, my = (p0[1] + tip[1]) / 2, a = Math.atan2(tip[1] - p0[1], tip[0] - p0[0]);
+      const c = [mx + Math.cos(a + Math.PI / 2) * bend, my + Math.sin(a + Math.PI / 2) * bend];
+      const start = qpt(p0, c, tip, .45), dir = (tip[0] < 150 ? -1 : 1) * (i === 0 ? -1 : 1);
+      const twigTip = [start[0] + dir * 22, start[1] - 40];
+      s += heatherStem(start, twigTip, dir * 5, fl[(i + 1) % fl.length], op, { leafFrom: .1, flowerFrom: .45 });
+    }
+  });
+  return s;
+}
+
+// urn plant: arching strap leaves with silver bands, forming a cup
+function strap(p0, deg, len, w, curl, fill = "var(--muted)", op = .3, bands = true) {
+  const a = deg * Math.PI / 180;
+  const p1 = [p0[0] + Math.cos(a) * len, p0[1] + Math.sin(a) * len];
+  const side = Math.cos(a) >= 0 ? 1 : -1;
+  const c = [p0[0] + Math.cos(a) * len * .55 + side * curl * .2, p0[1] + Math.sin(a) * len * .55 - curl];
+  const L = [], R = [], n = 16;
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, pt = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t);
+    const half = w * Math.sqrt(Math.max(0, 1 - Math.pow(t, 3.2))) * (.8 + .2 * Math.sin(Math.PI * t));
+    L.push([pt[0] + Math.cos(ta - Math.PI / 2) * half, pt[1] + Math.sin(ta - Math.PI / 2) * half]);
+    R.push([pt[0] + Math.cos(ta + Math.PI / 2) * half, pt[1] + Math.sin(ta + Math.PI / 2) * half]);
+  }
+  const pts = L.concat(R.reverse()).map(q => q.map(f1).join(" "));
+  let s = `<path d="M${pts.join(" L")} Z" fill="${fill}" fill-opacity="${op}" stroke="${INK}" stroke-width=".9" stroke-linejoin="round"/>`;
+  if (bands) for (let t = .1; t < .9; t += .08) {
+    const l = L[Math.round(t * n)], r = R[n - Math.round(t * n)];
+    s += `<path d="M${f1(l[0])} ${f1(l[1])} L${f1(r[0])} ${f1(r[1])}" stroke="#ffffff" stroke-width="1.8" opacity=".5"/>`;
+  }
+  return s;
+}
+function rosette(cx, cy, sc, fill, op, browned = 0, bands = true) {
+  const leaves = [[-104, 96, 9, 8], [-76, 96, 9, 8], [-128, 94, 10, 22], [-52, 94, 10, 22], [-150, 90, 10, 38], [-30, 90, 10, 38], [-172, 80, 9, 48], [-8, 80, 9, 48]];
+  return leaves.map(([deg, len, w, curl], i) => strap([cx, cy], deg, len * sc, w * sc, curl * sc, i < browned ? "var(--soil)" : fill, i < browned ? .45 : op, bands)).join("") +
+    `<path d="M${cx - 22 * sc} ${cy + 2} Q${cx} ${cy + 12 * sc} ${cx + 22 * sc} ${cy + 2}" fill="none" stroke="${INK}" stroke-width=".9"/>`;
+}
+function brHead(cx, cy, fill) {
+  let s = stem(`M${cx} ${cy + 96} C${cx - 2} ${cy + 70} ${cx + 2} ${cy + 40} ${cx} ${cy + 14}`, 3, "var(--feed)");
+  const rows = [[0, 1], [8, 3], [16, 4], [24, 5], [32, 5], [40, 4], [48, 3]];
+  rows.forEach(([dy, k]) => {
+    for (let j = 0; j < k; j++) {
+      const x = cx + (j - (k - 1) / 2) * 9, y = cy - 30 + dy;
+      s += `<path d="M${x - 5} ${y + 7} L${x} ${y - 7} L${x + 5} ${y + 7} Z" fill="${fill}" fill-opacity=".7" stroke="${INK}" stroke-width=".7" stroke-linejoin="round"/>`;
+      if ((j + dy / 8) % 3 === 1) s += `<circle cx="${x}" cy="${y + 1}" r="1.8" fill="var(--feed)" stroke="${INK}" stroke-width=".4"/>`;
+    }
+  });
+  return s;
+}
+
+// inch plant: trailing stems, pointed leaves with two silver stripes, three-petal flowers
+function zebLeaf(bx, by, len, w, deg) {
+  const a = deg * Math.PI / 180, n = 14, L = [], R = [], S1 = [], S2 = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, half = w * Math.pow(Math.sin(Math.PI * Math.min(1, t * 1.05)), .75) * (1 - .15 * t);
+    L.push(rot(t * len, -half, bx, by, a)); R.push(rot(t * len, half, bx, by, a));
+    if (t > .12 && t < .85) { S1.push(rot(t * len, -half * .55, bx, by, a)); S2.push(rot(t * len, half * .55, bx, by, a)); }
+  }
+  const pts = L.concat(R.slice().reverse()).map(q => q.map(f1).join(" "));
+  const line = q => "M" + q.map(z => z.map(f1).join(" ")).join(" L");
+  const tip = rot(len, 0, bx, by, a);
+  return `<path d="M${pts.join(" L")} Z" fill="var(--feed)" fill-opacity=".8" stroke="${INK}" stroke-width=".9" stroke-linejoin="round"/>
+    <path d="${line(S1)}" fill="none" stroke="#ffffff" stroke-width="${f1(w * .5)}" stroke-linecap="round" opacity=".75"/>
+    <path d="${line(S2)}" fill="none" stroke="#ffffff" stroke-width="${f1(w * .5)}" stroke-linecap="round" opacity=".75"/>
+    <path d="M${f1(bx)} ${f1(by)} L${f1(tip[0])} ${f1(tip[1])}" stroke="${INK}" stroke-width=".6" opacity=".7"/>`;
+}
+function triFlower(x, y, r) {
+  let s = "";
+  for (let k = 0; k < 3; k++) s += `<ellipse cx="0" cy="${f1(-r * .6)}" rx="${f1(r * .55)}" ry="${f1(r * .7)}" transform="translate(${f1(x)} ${f1(y)}) rotate(${k * 120 + 10})" fill="var(--pink)" fill-opacity=".8" stroke="${INK}" stroke-width=".6"/>`;
+  return s + `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r * .22)}" fill="#ffffff" stroke="${INK}" stroke-width=".4"/>`;
+}
+function trail(p0, p1, bend, flowers, opt = {}) {
+  const mx = (p0[0] + p1[0]) / 2, my = (p0[1] + p1[1]) / 2, a = Math.atan2(p1[1] - p0[1], p1[0] - p0[0]);
+  const c = [mx + Math.cos(a + Math.PI / 2) * bend, my + Math.sin(a + Math.PI / 2) * bend];
+  let s = stem(`M${f1(p0[0])} ${f1(p0[1])} Q${f1(c[0])} ${f1(c[1])} ${f1(p1[0])} ${f1(p1[1])}`, 2, "var(--feed)");
+  const ts = opt.ts || [.18, .36, .54, .72, .9];
+  ts.forEach((t, i) => {
+    const [x, y] = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t) * 180 / Math.PI, sd = i % 2 ? 1 : -1;
+    s += zebLeaf(x, y, 26 + t * 10, 7 + t * 2, ta + sd * 52);
+    s += `<circle cx="${f1(x)}" cy="${f1(y)}" r="1.6" fill="${INK}"/>`;
+  });
+  if (flowers) { const ta = qtan(p0, c, p1, 1) * 180 / Math.PI; s += zebLeaf(p1[0], p1[1], 18, 6, ta - 40) + zebLeaf(p1[0], p1[1], 18, 6, ta + 40) + triFlower(p1[0] + 2, p1[1] - 4, 8); }
+  return s;
+}
+function inchClump(fl) {
+  return trail([150, 70], [64, 220], -30, fl) + trail([150, 70], [236, 222], 30, fl) +
+    trail([150, 70], [110, 250], -12, false) + trail([150, 70], [196, 252], 14, fl, { ts: [.2, .4, .6, .8] }) +
+    trail([150, 70], [96, 120], -14, false, { ts: [.4, .8] }) + trail([150, 70], [210, 112], 16, fl, { ts: [.4, .8] });
+}
+
+// spider plant: arching grassy leaves with a cream center stripe, runners with star flowers and babies
+function grass(p0, deg, len, w, droop) {
+  const a = deg * Math.PI / 180, side = Math.cos(a) >= 0 ? 1 : -1;
+  const p1 = [p0[0] + Math.cos(a) * len + side * droop * .5, p0[1] + Math.sin(a) * len + droop];
+  const c = [p0[0] + Math.cos(a) * len * .7, p0[1] + Math.sin(a) * len * .7 - droop * .4];
+  const L = [], R = [], M = [], n = 14;
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, pt = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t), half = w * (1 - Math.pow(t, 1.6)) + .2;
+    L.push([pt[0] + Math.cos(ta - Math.PI / 2) * half, pt[1] + Math.sin(ta - Math.PI / 2) * half]);
+    R.push([pt[0] + Math.cos(ta + Math.PI / 2) * half, pt[1] + Math.sin(ta + Math.PI / 2) * half]);
+    if (t < .85) M.push(pt);
+  }
+  const pts = L.concat(R.slice().reverse()).map(q => q.map(f1).join(" "));
+  return `<path d="M${pts.join(" L")} Z" fill="var(--leaf)" fill-opacity=".55" stroke="${INK}" stroke-width=".8" stroke-linejoin="round"/>
+    <path d="M${M.map(q => q.map(f1).join(" ")).join(" L")}" fill="none" stroke="#fffbe6" stroke-width="${f1(w * .7)}" stroke-linecap="round" opacity=".8"/>`;
+}
+function spiderTuft(cx, cy, sc) {
+  const L = [[-95, 70, 4, 6], [-80, 74, 4, 10], [-110, 66, 4, 16], [-65, 68, 4, 18], [-130, 62, 4, 34], [-50, 62, 4, 34], [-150, 58, 3.6, 46], [-30, 58, 3.6, 46], [-168, 50, 3.4, 50], [-12, 50, 3.4, 50]];
+  return L.map(([d, l, w, dr]) => grass([cx, cy], d, l * sc, w * sc, dr * sc)).join("");
+}
+function star(x, y, r) {
+  let s = "";
+  for (let k = 0; k < 6; k++) s += `<ellipse cx="0" cy="${f1(-r * .55)}" rx="${f1(r * .25)}" ry="${f1(r * .55)}" transform="translate(${f1(x)} ${f1(y)}) rotate(${k * 60})" fill="#ffffff" stroke="${INK}" stroke-width=".5"/>`;
+  return s + `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r * .18)}" fill="var(--sun)"/>`;
+}
+function runner(p0, p1, bend, opt = {}) {
+  const mx = (p0[0] + p1[0]) / 2, my = (p0[1] + p1[1]) / 2;
+  const c = [mx, my - bend];
+  let s = stem(`M${f1(p0[0])} ${f1(p0[1])} Q${f1(c[0])} ${f1(c[1])} ${f1(p1[0])} ${f1(p1[1])}`, 1.4, "var(--sun)");
+  if (opt.flowers) [.45, .62, .78].forEach(t => { const q = qpt(p0, c, p1, t); s += star(q[0], q[1] - 3, 6); });
+  if (opt.baby) s += spiderTuft(p1[0], p1[1], .32) + `<path d="M${p1[0] - 4} ${p1[1]} l-2 7 M${p1[0]} ${p1[1]} l0 8 M${p1[0] + 4} ${p1[1]} l2 7" stroke="${INK}" stroke-width=".8"/>`;
+  return s;
+}
+
+// pothos: heart-shaped leaves with yellow streaks on trailing vines, root bumps at the joints
+function heartLeaf(x, y, L, deg) {
+  const d = `M0 0 C${-.15 * L} ${.12 * L} ${-.6 * L} ${.05 * L} ${-.5 * L} ${-.35 * L} C${-.4 * L} ${-.7 * L} ${-.1 * L} ${-.9 * L} 0 ${-L} C${.1 * L} ${-.9 * L} ${.4 * L} ${-.7 * L} ${.5 * L} ${-.35 * L} C${.6 * L} ${.05 * L} ${.15 * L} ${.12 * L} 0 0 Z`;
+  return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(deg)})">
+    <path d="${d}" fill="var(--leaf)" fill-opacity=".6" stroke="${INK}" stroke-width=".9" stroke-linejoin="round"/>
+    <path d="M${-.18 * L} ${-.25 * L} q${.08 * L} ${-.25 * L} ${.12 * L} ${-.55 * L} M${.2 * L} ${-.2 * L} q${-.04 * L} ${-.3 * L} ${-.1 * L} ${-.6 * L} M${-.32 * L} ${-.4 * L} q${.06 * L} ${-.12 * L} ${.16 * L} ${-.26 * L}" fill="none" stroke="var(--sun)" stroke-width="${f1(L * .07)}" stroke-linecap="round" opacity=".75"/>
+    <path d="M0 -2 L0 ${-L * .92}" stroke="${INK}" stroke-width=".6"/></g>`;
+}
+function vine(p0, p1, bend, ts) {
+  const mx = (p0[0] + p1[0]) / 2, my = (p0[1] + p1[1]) / 2, a = Math.atan2(p1[1] - p0[1], p1[0] - p0[0]);
+  const c = [mx + Math.cos(a + Math.PI / 2) * bend, my + Math.sin(a + Math.PI / 2) * bend];
+  let s = stem(`M${f1(p0[0])} ${f1(p0[1])} Q${f1(c[0])} ${f1(c[1])} ${f1(p1[0])} ${f1(p1[1])}`, 1.8, "var(--leaf)");
+  (ts || [.15, .32, .5, .68, .86, 1]).forEach((t, i) => {
+    const [x, y] = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t) * 180 / Math.PI, sd = i % 2 ? 1 : -1;
+    s += heartLeaf(x, y, 20 + t * 10, ta + 90 + sd * 70) + `<circle cx="${f1(x)}" cy="${f1(y)}" r="2" fill="var(--soil)" stroke="${INK}" stroke-width=".5"/>`;
+  });
+  return s;
+}
+
+// tomato: compound leaves of toothed leaflets, yellow star flowers, round fruit
+function tomLeaf(x, y, len, deg) {
+  const a = deg * Math.PI / 180, tip = [x + Math.cos(a) * len, y + Math.sin(a) * len];
+  let s = `<path d="M${f1(x)} ${f1(y)} L${f1(tip[0])} ${f1(tip[1])}" stroke="${INK}" stroke-width="1"/>`;
+  [.3, .55, .8].forEach((t, i) => {
+    const px = x + Math.cos(a) * len * t, py = y + Math.sin(a) * len * t;
+    s += leaf(px, py, len * .32, len * .1, deg - 60, 5) + leaf(px, py, len * .32, len * .1, deg + 60, 5);
+  });
+  return s + leaf(tip[0], tip[1], len * .34, len * .11, deg, 5);
+}
+function yStar(x, y, r) {
+  let s = "";
+  for (let k = 0; k < 5; k++) s += `<path d="M0 0 L${f1(-r * .28)} ${f1(-r * .7)} L0 ${f1(-r)} L${f1(r * .28)} ${f1(-r * .7)} Z" transform="translate(${f1(x)} ${f1(y)}) rotate(${k * 72})" fill="var(--sun)" fill-opacity=".85" stroke="${INK}" stroke-width=".5"/>`;
+  return s + `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r * .22)}" fill="var(--sun)" stroke="${INK}" stroke-width=".5"/>`;
+}
+function fruit(x, y, r, fill) {
+  return `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r)}" fill="${fill}" fill-opacity=".8" stroke="${INK}" stroke-width=".9"/>
+    <path d="M${f1(x - r * .35)} ${f1(y - r * .45)} q${f1(r * .2)} ${f1(-r * .2)} ${f1(r * .45)} ${f1(-r * .1)}" stroke="#ffffff" stroke-width="1.2" fill="none" opacity=".6"/>
+    ${[0, 72, 144, 216, 288].map(d => `<path d="M${f1(x)} ${f1(y - r)} l0 -${f1(r * .35)}" transform="rotate(${d} ${f1(x)} ${f1(y - r)})" stroke="var(--leaf)" stroke-width="1.6" stroke-linecap="round"/>`).join("")}`;
+}
+
+// basil: smooth glossy paired leaves, square stem, whorled white flower spikes
+function basilLeaf(x, y, len, deg) {
+  const a = deg * Math.PI / 180, n = 12, L = [], R = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, half = len * .36 * Math.pow(Math.sin(Math.PI * Math.min(1, t * 1.02)), .8) * (1 - .3 * t);
+    L.push(rot(t * len, -half, x, y, a)); R.push(rot(t * len, half, x, y, a));
+  }
+  const pts = L.concat(R.reverse()).map(q => q.map(f1).join(" "));
+  const tip = rot(len, 0, x, y, a);
+  return `<path d="M${pts.join(" L")} Z" fill="var(--leaf)" fill-opacity=".55" stroke="${INK}" stroke-width=".9" stroke-linejoin="round"/>
+    <path d="M${f1(x)} ${f1(y)} L${f1(tip[0])} ${f1(tip[1])}" stroke="${INK}" stroke-width=".5"/>`;
+}
+function basilSpike(x, yTop, yBot, fill = "#ffffff") {
+  let s = stem(`M${x} ${yBot} L${x} ${yTop}`, 1.2, "var(--leaf)");
+  for (let y = yTop + 4, i = 0; y < yBot; y += 9, i++) {
+    [-1, 1].forEach(sd => s += `<ellipse cx="${f1(x + sd * 4.5)}" cy="${f1(y)}" rx="3" ry="2.2" transform="rotate(${sd * 20} ${f1(x + sd * 4.5)} ${f1(y)})" fill="${fill}" stroke="${INK}" stroke-width=".5"/>`);
+    s += `<path d="M${x - 6} ${y + 3} q6 3 12 0" fill="none" stroke="${INK}" stroke-width=".6"/>`;
+  }
+  return s;
+}
+function basilPlant(flowers) {
+  let s = stem("M150 268 L150 70", 2.6, "var(--leaf)") + stem("M150 176 C130 160 118 140 114 104", 2, "var(--leaf)") + stem("M150 160 C170 146 182 126 186 96", 2, "var(--leaf)");
+  [[150, 236, 44], [150, 196, 40], [150, 146, 34], [150, 104, 26]].forEach(([x, y, l]) => s += basilLeaf(x, y, l, 200) + basilLeaf(x, y, l, -20));
+  [[116, 130, 26], [184, 122, 26]].forEach(([x, y, l]) => s += basilLeaf(x, y, l, 210) + basilLeaf(x, y, l, -30));
+  if (flowers) s += basilSpike(150, 26, 72) + basilSpike(114, 58, 106) + basilSpike(186, 50, 98);
+  else s += basilLeaf(150, 72, 18, 230) + basilLeaf(150, 72, 18, -50) + basilLeaf(114, 106, 16, 240) + basilLeaf(114, 106, 16, -60) + basilLeaf(186, 98, 16, 240) + basilLeaf(186, 98, 16, -60);
+  return s;
+}
+
+// flaming sword: a flat spike of overlapping yellow bracts
+function sword(cx, top, bottom) {
+  let s = stem(`M${cx} ${bottom} L${cx} ${top + 8}`, 2.4, "var(--leaf)");
+  const n = 11, span = bottom - 40 - top;
+  for (let i = 0; i < n; i++) {
+    const y = bottom - 40 - i * span / n, sd = i % 2 ? 1 : -1, sc = 1 - i * .045;
+    const ex = cx + sd * 6 * sc, ey = y - 4;
+    s += `<ellipse cx="${f1(ex)}" cy="${f1(ey)}" rx="${f1(6.5 * sc)}" ry="${f1(13 * sc)}" transform="rotate(${sd * 38} ${f1(ex)} ${f1(ey)})" fill="var(--yellow)" fill-opacity=".9" stroke="${INK}" stroke-width=".7"/>`;
+  }
+  return s;
+}
+
+// pepper: smooth pointed leaves, nodding white flowers, hanging pods
+function pod(x, y, len, fill, deg = 0) {
+  return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${deg})">
+    <path d="M-5 4 C-7 ${f1(len * .5)} -3 ${f1(len * .9)} 0 ${f1(len)} C3 ${f1(len * .9)} 7 ${f1(len * .5)} 5 4 Z" fill="${fill}" fill-opacity=".85" stroke="${INK}" stroke-width=".9"/>
+    <path d="M-5 4 Q0 -1 5 4" fill="var(--leaf)" stroke="${INK}" stroke-width=".8"/><path d="M0 1 L0 -7" stroke="${INK}" stroke-width="1.6"/><path d="M0 1 L0 -7" stroke="var(--leaf)" stroke-width=".8"/>
+    <path d="M-2 10 Q-3 ${f1(len * .5)} -1 ${f1(len * .8)}" stroke="#ffffff" stroke-width="1.2" fill="none" opacity=".5"/></g>`;
+}
+function nodFlower(x, y, r) {
+  let s = `<path d="M${x} ${y - 8} L${x} ${y}" stroke="${INK}" stroke-width=".8"/>`;
+  for (let k = 0; k < 5; k++) s += `<ellipse cx="0" cy="${f1(r * .55)}" rx="${f1(r * .3)}" ry="${f1(r * .55)}" transform="translate(${x} ${y}) rotate(${k * 72 - 144})" fill="#ffffff" stroke="${INK}" stroke-width=".5"/>`;
+  return s + `<circle cx="${x}" cy="${y + 1}" r="${f1(r * .22)}" fill="var(--sun)"/>`;
+}
+
+// strawberry: leaves in threes with toothed leaflets, white five-petal flowers, seeded red berries, runners
+function trifol(x, y, len, deg) {
+  let s = stem(`M${x} ${y} L${f1(x + Math.cos((deg - 90) * Math.PI / 180) * len)} ${f1(y + Math.sin((deg - 90) * Math.PI / 180) * len)}`, 1.3, "var(--leaf)");
+  const tx = x + Math.cos((deg - 90) * Math.PI / 180) * len, ty = y + Math.sin((deg - 90) * Math.PI / 180) * len;
+  return s + leaf(tx, ty, 20, 9, deg - 135, 6) + leaf(tx, ty, 20, 9, deg - 45, 6) + leaf(tx, ty, 22, 10, deg - 90, 6);
+}
+function whiteFlower(x, y, r) {
+  let s = "";
+  for (let k = 0; k < 5; k++) s += `<circle cx="${f1(x + Math.cos(k * 1.2566) * r * .55)}" cy="${f1(y + Math.sin(k * 1.2566) * r * .55)}" r="${f1(r * .45)}" fill="#ffffff" stroke="${INK}" stroke-width=".5"/>`;
+  return s + `<circle cx="${x}" cy="${y}" r="${f1(r * .35)}" fill="var(--yellow)" stroke="${INK}" stroke-width=".5"/>`;
+}
+function berry(x, y, r) {
+  let s = `<path d="M${x} ${y - r} C${x + r * 1.1} ${y - r} ${x + r * .9} ${y + r * .6} ${x} ${y + r * 1.25} C${x - r * .9} ${y + r * .6} ${x - r * 1.1} ${y - r} ${x} ${y - r} Z" fill="var(--foe)" fill-opacity=".85" stroke="${INK}" stroke-width=".8"/>`;
+  for (let i = 0; i < 7; i++) s += `<circle cx="${f1(x + Math.cos(i * 2.4) * r * .45)}" cy="${f1(y + Math.sin(i * 2.4) * r * .55)}" r=".9" fill="var(--yellow)"/>`;
+  return s + `<path d="M${x - r * .7} ${y - r * .9} L${x} ${y - r * .5} L${x + r * .7} ${y - r * .9} M${x} ${y - r} L${x} ${y - r * 1.6}" stroke="var(--leaf)" stroke-width="1.4" fill="none"/>`;
+}
+
+// green onion: upright hollow tube leaves from slim white bases; flower = round ball of tiny cream florets on a tall hollow stalk
+function tubeLeaf(x, y, deg, len, w, droop) {
+  const p0 = [x, y], a = deg * Math.PI / 180, side = Math.cos(a) >= 0 ? 1 : -1;
+  const p1 = [x + Math.cos(a) * len + side * droop, y + Math.sin(a) * len + droop * .3];
+  const c = [x + Math.cos(a) * len * .6, y + Math.sin(a) * len * .6];
+  const L = [], R = [], M = [], n = 16;
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, pt = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t), half = w * (t < .8 ? 1 : Math.max(0, (1 - t) / .2)) + .15;
+    L.push([pt[0] + Math.cos(ta - Math.PI / 2) * half, pt[1] + Math.sin(ta - Math.PI / 2) * half]);
+    R.push([pt[0] + Math.cos(ta + Math.PI / 2) * half, pt[1] + Math.sin(ta + Math.PI / 2) * half]);
+    if (t < .8) M.push([pt[0] + Math.cos(ta - Math.PI / 2) * half * .35, pt[1] + Math.sin(ta - Math.PI / 2) * half * .35]);
+  }
+  const pts = L.concat(R.slice().reverse()).map(q => q.map(f1).join(" "));
+  return `<path d="M${pts.join(" L")} Z" fill="var(--leaf)" fill-opacity=".5" stroke="${INK}" stroke-width=".8" stroke-linejoin="round"/>
+    <path d="M${M.map(q => q.map(f1).join(" ")).join(" L")}" fill="none" stroke="#fffbe6" stroke-width="${f1(w * .45)}" stroke-linecap="round" opacity=".75"/>`;
+}
+function onionBase(x, y) {
+  return `<path d="M${x - 3.6} ${y - 18} C${x - 4.6} ${y - 6} ${x - 5} ${y - 1} ${x} ${y + 2} C${x + 5} ${y - 1} ${x + 4.6} ${y - 6} ${x + 3.6} ${y - 18} Z" fill="#ffffff" stroke="${INK}" stroke-width=".8"/>` +
+    `<path d="M${x - 1.5} ${y + 2} l-2 6 M${x} ${y + 2} l0 7 M${x + 1.5} ${y + 2} l2 6" stroke="${INK}" stroke-width=".6"/>`;
+}
+function onionClump(cx, y, sc = 1) {
+  const L = [[-12, -100, 132, 2.6, 4], [-8, -93, 146, 2.6, 2], [-4, -85, 118, 2.5, 6], [0, -90, 156, 2.7, 1], [4, -96, 124, 2.5, 5], [8, -86, 138, 2.6, 3], [12, -80, 110, 2.4, 8], [-14, -110, 96, 2.3, 10]];
+  let s = "";
+  L.forEach(([dx, d, l, w, dr]) => { s += tubeLeaf(cx + dx * sc, y - 16 * sc, d, l * sc, w * sc, dr * sc); });
+  [-12, 0, 12].forEach(dx => { s += `<g transform="translate(${f1(cx + dx * sc)} ${y}) scale(${sc}) translate(${f1(-(cx + dx * sc))} ${-y})">${onionBase(cx + dx * sc, y)}</g>`; });
+  return s;
+}
+function umbel(x, y, r) {
+  _seed = 31; let s = `<circle cx="${x}" cy="${y}" r="${r}" fill="#fffbe6" fill-opacity=".9" stroke="${INK}" stroke-width=".5"/>`;
+  for (let k = 0; k < 46; k++) {
+    const a = rnd() * Math.PI * 2, d = Math.sqrt(rnd()) * r * .92, px = x + Math.cos(a) * d, py = y + Math.sin(a) * d;
+    s += `<circle cx="${f1(px)}" cy="${f1(py)}" r="1.8" fill="#ffffff" stroke="${INK}" stroke-width=".45"/><circle cx="${f1(px)}" cy="${f1(py)}" r=".6" fill="var(--yellow)"/>`;
+  }
+  return s;
+}
+function scape(x, y, top, bulge = 1) {
+  const m = (y + top) / 2;
+  return `<path d="M${x - 1.6} ${y} C${x - 3.4 * bulge} ${m + 20} ${x - 3.4 * bulge} ${m - 20} ${x - 1.4} ${top} L${x + 1.4} ${top} C${x + 3.4 * bulge} ${m - 20} ${x + 3.4 * bulge} ${m + 20} ${x + 1.6} ${y} Z" fill="var(--leaf)" fill-opacity=".6" stroke="${INK}" stroke-width=".8"/>`;
+}
+
+// monstera adansonii: oval pointed leaves, a bit lopsided, with oval holes between the veins; thin brown aerial roots at the joints
+function ell(cx, cy, rx, ry) { return `M${f1(cx - rx)} ${f1(cy)} a${f1(rx)} ${f1(ry)} 0 1 0 ${f1(2 * rx)} 0 a${f1(rx)} ${f1(ry)} 0 1 0 ${f1(-2 * rx)} 0 Z`; }
+function holeLeaf(x, y, L, deg) {
+  const out = `M0 0 C${-.42 * L} ${-.08 * L} ${-.5 * L} ${-.62 * L} 0 ${-L} C${.38 * L} ${-.66 * L} ${.36 * L} ${-.1 * L} 0 0 Z`;
+  let holes = "";
+  [[-.2, -.3, .09, .05], [-.23, -.52, .085, .045], [-.15, -.72, .06, .035], [.17, -.36, .08, .045], [.16, -.58, .07, .04]].forEach(([hx, hy, rx, ry]) => holes += ell(hx * L, hy * L, rx * L, ry * L));
+  return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(deg)})">
+    <path d="${out} ${holes}" fill-rule="evenodd" fill="var(--leaf)" fill-opacity=".62" stroke="${INK}" stroke-width=".9" stroke-linejoin="round"/>
+    <path d="M0 -2 L0 ${f1(-L * .94)}" stroke="${INK}" stroke-width=".6"/></g>`;
+}
+function monsVine(p0, p1, bend, ts) {
+  const mx = (p0[0] + p1[0]) / 2, my = (p0[1] + p1[1]) / 2, a = Math.atan2(p1[1] - p0[1], p1[0] - p0[0]);
+  const c = [mx + Math.cos(a + Math.PI / 2) * bend, my + Math.sin(a + Math.PI / 2) * bend];
+  let s = stem(`M${f1(p0[0])} ${f1(p0[1])} Q${f1(c[0])} ${f1(c[1])} ${f1(p1[0])} ${f1(p1[1])}`, 1.8, "var(--leaf)"), roots = "";
+  (ts || [.15, .34, .53, .72, .9]).forEach((t, i) => {
+    const [x, y] = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t) * 180 / Math.PI, sd = i % 2 ? 1 : -1;
+    roots += `<path d="M${f1(x)} ${f1(y)} q${-sd * 5} 10 ${-sd * 1} 20" fill="none" stroke="var(--soil)" stroke-width="1.3" stroke-linecap="round"/>`;
+    s += holeLeaf(x, y, 30 + t * 12, ta + 90 + sd * 68);
+  });
+  return s + roots;
+}
+
+// ginger: reed-like stalks with long narrow smooth leaves in two rows; knobbly tan root (rhizome) at the surface
+function lanceLeaf(x, y, len, w, deg, droop = 6, fill = "var(--leaf)") {
+  const p0 = [x, y], a = deg * Math.PI / 180, side = Math.cos(a) >= 0 ? 1 : -1;
+  const p1 = [x + Math.cos(a) * len, y + Math.sin(a) * len + droop];
+  const c = [x + Math.cos(a) * len * .55, y + Math.sin(a) * len * .55 - droop * .3];
+  const L = [], R = [], n = 16;
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, pt = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t), half = w * Math.pow(Math.sin(Math.PI * Math.min(t * 1.05, 1)), .8) * (1 - .35 * t) + .1;
+    L.push([pt[0] + Math.cos(ta - Math.PI / 2) * half, pt[1] + Math.sin(ta - Math.PI / 2) * half]);
+    R.push([pt[0] + Math.cos(ta + Math.PI / 2) * half, pt[1] + Math.sin(ta + Math.PI / 2) * half]);
+  }
+  const pts = L.concat(R.slice().reverse()).map(q => q.map(f1).join(" "));
+  return `<path d="M${pts.join(" L")} Z" fill="${fill}" fill-opacity=".5" stroke="${INK}" stroke-width=".8" stroke-linejoin="round"/>
+    <path d="M${f1(x)} ${f1(y)} Q${f1(c[0])} ${f1(c[1])} ${f1(p1[0])} ${f1(p1[1])}" fill="none" stroke="${INK}" stroke-width=".5" opacity=".7"/>`;
+}
+function gingerStalk(x, y, h, lean, n = 6) {
+  const top = [x + lean, y - h], c = [x + lean * .2, y - h * .5];
+  let s = stem(`M${x} ${y} Q${f1(c[0])} ${f1(c[1])} ${f1(top[0])} ${f1(top[1])}`, 1.8, "var(--leaf)");
+  for (let i = 0; i < n; i++) {
+    const t = .3 + .7 * i / (n - 1), [px, py] = qpt([x, y], c, top, t), sd = i % 2 ? 1 : -1;
+    s += lanceLeaf(px, py, 62 - i * 4, 5.5, sd > 0 ? -26 : -154, 12);
+  }
+  return s;
+}
+function rhizome(x, y, sc = 1) {
+  const knobs = [[0, 0, 16, 9], [20, -3, 13, 8], [36, 2, 11, 7], [-18, 2, 12, 8], [10, 9, 9, 6], [-30, -2, 8, 6]];
+  let s = "";
+  knobs.forEach(([dx, dy, rx, ry]) => {
+    s += `<ellipse cx="${f1(x + dx * sc)}" cy="${f1(y + dy * sc)}" rx="${f1(rx * sc)}" ry="${f1(ry * sc)}" fill="#e6c68c" stroke="${INK}" stroke-width=".8"/>`;
+    s += `<path d="M${f1(x + dx * sc - rx * sc * .3)} ${f1(y + dy * sc - ry * sc * .8)} q2 ${f1(ry * sc * .8)} 0 ${f1(ry * sc * 1.6)}" fill="none" stroke="${INK}" stroke-width=".45" opacity=".6"/>`;
+  });
+  s += [[40, -4], [-34, -4]].map(([dx, dy]) => `<ellipse cx="${f1(x + dx * sc)}" cy="${f1(y + dy * sc)}" rx="${f1(3 * sc)}" ry="${f1(2.2 * sc)}" fill="var(--pink)" stroke="${INK}" stroke-width=".5"/>`).join("");
+  return s;
+}
+
+// lavender: woody grey base, tufts of narrow grey-green leaves, long bare stalks topped with spikes of purple whorls
+const LAVLEAF = "#8fa39a";
+function lavSpike(x, y, top, lean = 0) {
+  let s = stem(`M${f1(x)} ${f1(y)} Q${f1(x + lean * .3)} ${f1((y + top) / 2)} ${f1(x + lean)} ${f1(top)}`, 1, "var(--leaf)");
+  const n = 7;
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1), yy = top + 3 + t * 34 + (i > 4 ? (i - 4) * 6 : 0), xx = x + lean - lean * .3 * t * .4, r = 3.4 - t * 1.1;
+    s += `<ellipse cx="${f1(xx - r * .7)}" cy="${f1(yy)}" rx="${f1(r * .75)}" ry="${f1(r)}" fill="var(--feed)" fill-opacity=".8" stroke="${INK}" stroke-width=".5"/>` +
+      `<ellipse cx="${f1(xx + r * .7)}" cy="${f1(yy)}" rx="${f1(r * .75)}" ry="${f1(r)}" fill="var(--feed)" fill-opacity=".8" stroke="${INK}" stroke-width=".5"/>` +
+      `<ellipse cx="${f1(xx)}" cy="${f1(yy - 1)}" rx="${f1(r * .6)}" ry="${f1(r * .9)}" fill="var(--feed)" stroke="${INK}" stroke-width=".5"/>`;
+  }
+  return s;
+}
+function lavTuft(x, y, sc = 1) {
+  let s = "";
+  [-160, -140, -122, -106, -90, -74, -58, -40, -20].forEach((d, i) => { s += lanceLeaf(x, y, (15 + (i % 3) * 4) * sc, 1.7 * sc, d, 2, LAVLEAF); });
+  return s;
+}
+function lavBush(flowers, sc = 1, cx = 150, base = 236) {
+  const P = (dx, dy) => [cx + dx * sc, base + dy * sc];
+  let s = "";
+  const woody = [[-6, -58, -30], [-3, -36, -44], [0, -12, -50], [3, 14, -48], [6, 38, -40], [8, 60, -26]];
+  const tips = [];
+  woody.forEach(([a, c, d]) => {
+    const [x0, y0] = P(a, 0), [x1, y1] = P(c, d);
+    s += stem(`M${f1(x0)} ${f1(y0)} Q${f1((x0 + x1) / 2)} ${f1(y0 - 4 * sc)} ${f1(x1)} ${f1(y1)}`, 2.2 * sc, "#9b9089");
+    tips.push([x1, y1], [(x0 + x1 * 2) / 3 + 0, (y0 + y1 * 2) / 3 + 2 * sc]);
+  });
+  if (flowers) {
+    [[-36, -44, -150, -12], [-12, -50, -176, -4], [14, -48, -170, 6], [38, -40, -146, 14], [-58, -30, -122, -20], [60, -26, -126, 20], [0, -52, -188, 0]].forEach(([a, b, top, lean]) => {
+      const [x0, y0] = P(a, b); s += lavSpike(x0, y0 - 10 * sc, base + top * sc, lean * sc);
+    });
+  }
+  tips.concat([P(-24, -52), P(26, -52), P(-48, -42), P(50, -38)]).forEach(([x, y]) => { s += lavTuft(x, y, sc); });
+  return s;
+}
+
+// star jasmine: woody twining stem, glossy dark oval leaves in opposite pairs, white pinwheel flowers in loose clusters
+function glossLeaf(x, y, L, deg) {
+  const d = `M0 0 C${-.34 * L} ${-.18 * L} ${-.3 * L} ${-.78 * L} 0 ${-L} C${.3 * L} ${-.78 * L} ${.34 * L} ${-.18 * L} 0 0 Z`;
+  return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(deg)})"><path d="${d}" fill="var(--leaf)" fill-opacity=".85" stroke="${INK}" stroke-width=".9"/>
+    <path d="M${f1(-.12 * L)} ${f1(-.3 * L)} Q${f1(-.16 * L)} ${f1(-.6 * L)} ${f1(-.04 * L)} ${f1(-.82 * L)}" fill="none" stroke="#ffffff" stroke-width="${f1(L * .06)}" stroke-linecap="round" opacity=".45"/>
+    <path d="M0 -2 L0 ${f1(-L * .94)}" stroke="${INK}" stroke-width=".55"/></g>`;
+}
+function pinwheel(x, y, r) {
+  let s = "";
+  for (let k = 0; k < 5; k++) s += `<path d="M0 0 C${f1(r * .1)} ${f1(-r * .5)} ${f1(r * .7)} ${f1(-r * 1.05)} ${f1(r * .2)} ${f1(-r * 1.1)} C${f1(-r * .25)} ${f1(-r * 1.1)} ${f1(-r * .3)} ${f1(-r * .5)} 0 0 Z" transform="translate(${f1(x)} ${f1(y)}) rotate(${k * 72})" fill="#ffffff" stroke="${INK}" stroke-width=".6"/>`;
+  return s + `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r * .14)}" fill="var(--yellow)" stroke="${INK}" stroke-width=".4"/>`;
+}
+function jasVine(p0, c, p1, pairs, flowers, sc = 1) {
+  let s = stem(`M${p0[0]} ${p0[1]} Q${c[0]} ${c[1]} ${p1[0]} ${p1[1]}`, 1.6 * sc, "#8a7a6a");
+  pairs.forEach(t => {
+    const [x, y] = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t) * 180 / Math.PI;
+    s += glossLeaf(x, y, 24 * sc, ta + 90 - 62) + glossLeaf(x, y, 24 * sc, ta + 90 + 62);
+  });
+  (flowers || []).forEach(([t, n]) => {
+    const [x, y] = qpt(p0, c, p1, t);
+    for (let i = 0; i < n; i++) {
+      const a = (-150 + i * 40) * Math.PI / 180, fx = x + Math.cos(a) * 18 * sc, fy = y + Math.sin(a) * 18 * sc - 6 * sc;
+      s += `<path d="M${f1(x)} ${f1(y)} L${f1(fx)} ${f1(fy)}" stroke="var(--leaf)" stroke-width="1"/>` + pinwheel(fx, fy, 7 * sc);
+    }
+  });
+  return s;
+}
+
+// morning glory: twining vine of heart-shaped leaves, trumpet flowers seen face-on and side-on, round seed pods
+function mgLeaf(x, y, L, deg) {
+  const d = `M0 0 C${-.15 * L} ${.12 * L} ${-.6 * L} ${.05 * L} ${-.5 * L} ${-.35 * L} C${-.42 * L} ${-.68 * L} ${-.12 * L} ${-.86 * L} 0 ${-L} C${.12 * L} ${-.86 * L} ${.42 * L} ${-.68 * L} ${.5 * L} ${-.35 * L} C${.6 * L} ${.05 * L} ${.15 * L} ${.12 * L} 0 0 Z`;
+  return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(deg)})"><path d="${d}" fill="var(--leaf)" fill-opacity=".55" stroke="${INK}" stroke-width=".9" stroke-linejoin="round"/>
+    <path d="M0 -2 L0 ${f1(-L * .92)} M0 ${f1(-L * .3)} l${f1(-L * .25)} ${f1(-L * .18)} M0 ${f1(-L * .3)} l${f1(L * .25)} ${f1(-L * .18)} M0 ${f1(-L * .55)} l${f1(-L * .2)} ${f1(-L * .14)} M0 ${f1(-L * .55)} l${f1(L * .2)} ${f1(-L * .14)}" fill="none" stroke="${INK}" stroke-width=".5" opacity=".7"/></g>`;
+}
+function trumpetFace(x, y, r) {
+  let s = `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r)}" fill="var(--feed)" fill-opacity=".75" stroke="${INK}" stroke-width=".9"/>`;
+  for (let k = 0; k < 5; k++) { const a = (k * 72 - 90) * Math.PI / 180; s += `<path d="M${f1(x + Math.cos(a) * r * .3)} ${f1(y + Math.sin(a) * r * .3)} L${f1(x + Math.cos(a) * r)} ${f1(y + Math.sin(a) * r)}" stroke="#ffffff" stroke-width="1.6" opacity=".8"/>`; }
+  return s + `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r * .3)}" fill="#ffffff" stroke="${INK}" stroke-width=".5"/>`;
+}
+function trumpetSide(x, y, len, deg) {
+  return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(deg)})"><path d="M0 0 C${f1(len * .3)} -3 ${f1(len * .6)} -4 ${f1(len)} ${f1(-len * .38)} L${f1(len)} ${f1(len * .38)} C${f1(len * .6)} 4 ${f1(len * .3)} 3 0 0 Z" fill="var(--feed)" fill-opacity=".75" stroke="${INK}" stroke-width=".8"/>
+    <ellipse cx="${f1(len)}" cy="0" rx="${f1(len * .1)}" ry="${f1(len * .38)}" fill="var(--feed)" stroke="${INK}" stroke-width=".7"/></g>`;
+}
+function mgVine(p0, c, p1, leaves, sc = 1) {
+  let s = stem(`M${p0[0]} ${p0[1]} Q${c[0]} ${c[1]} ${p1[0]} ${p1[1]}`, 1.2 * sc, "var(--leaf)");
+  leaves.forEach((t, i) => {
+    const [x, y] = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t) * 180 / Math.PI, sd = i % 2 ? 1 : -1;
+    s += mgLeaf(x, y, (26 - t * 6) * sc, ta + 90 + sd * 75);
+  });
+  return s;
+}
+function mgPlant(flowers) {
+  let s = `<path d="M150 266 L150 26 M120 266 L120 40 M180 266 L180 40" stroke="#b8a888" stroke-width="1.4" stroke-dasharray="1 0"/><path d="M110 266 L190 266" stroke="var(--soil)" stroke-width="3"/>`;
+  s += mgVine([150, 262], [100, 170], [176, 44], [.15, .3, .45, .6, .75, .9]);
+  s += mgVine([150, 262], [200, 200], [124, 70], [.25, .5, .7, .88]);
+  if (flowers) {
+    const A = [[150, 262], [100, 170], [176, 44]], B = [[150, 262], [200, 200], [124, 70]];
+    const at = (V, tt, dx, dy) => { const [x, y] = qpt(V[0], V[1], V[2], tt); return [x, y, x + dx, y + dy]; };
+    [[A, .82, 26, -10, "face", 15], [A, .38, -30, -8, "face", 12], [B, .62, 28, -6, "side", 26]].forEach(([V, tt, dx, dy, kind, r]) => {
+      const [x, y, fx, fy] = at(V, tt, dx, dy);
+      s += `<path d="M${f1(x)} ${f1(y)} Q${f1((x + fx) / 2)} ${f1(Math.min(y, fy) - 6)} ${f1(fx)} ${f1(fy)}" fill="none" stroke="var(--leaf)" stroke-width="1.2"/>`;
+      s += kind === "face" ? trumpetFace(fx + Math.sign(dx) * r * .7, fy, r) : trumpetSide(fx, fy, r, -14);
+    });
+    const [x, y] = qpt(B[0], B[1], B[2], .28);
+    [[16, 4], [24, 12]].forEach(([dx, dy]) => { s += `<path d="M${f1(x)} ${f1(y)} L${f1(x + dx)} ${f1(y + dy - 5)}" stroke="var(--leaf)" stroke-width="1"/><circle cx="${f1(x + dx)}" cy="${f1(y + dy)}" r="5" fill="#d8c9a3" stroke="${INK}" stroke-width=".7"/><path d="M${f1(x + dx - 4)} ${f1(y + dy - 4)} l3 3 M${f1(x + dx + 4)} ${f1(y + dy - 4)} l-3 3" stroke="${INK}" stroke-width=".6"/>`; });
+  }
+  return s;
+}
+
+// succulent box: aeonium rosettes on woody stems, pine-tree crassula, ghost plant rosette, freckled ox tongue, striped zebra plant
+function rosetteTop(x, y, r, n, fill, op = .6, edge = "var(--pink)") {
+  let s = "";
+  [1, .72, .45].forEach((k, ring) => {
+    const m = Math.round(n * (ring ? .8 : 1));
+    for (let i = 0; i < m; i++) {
+      const a = (i / m) * 360 + ring * 17;
+      s += `<path d="M0 0 C${f1(-r * k * .38)} ${f1(-r * k * .35)} ${f1(-r * k * .32)} ${f1(-r * k * .95)} 0 ${f1(-r * k)} C${f1(r * k * .32)} ${f1(-r * k * .95)} ${f1(r * k * .38)} ${f1(-r * k * .35)} 0 0 Z" transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(a)})" fill="${fill}" fill-opacity="${op}" stroke="${edge}" stroke-width=".9"/>`;
+    }
+  });
+  return s + `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r * .12)}" fill="${fill}" stroke="${INK}" stroke-width=".4"/>`;
+}
+function rosetteSide(x, y, r, fill, edge) {
+  let s = "";
+  [-70, -40, -12, 12, 40, 70, -55, 55, 0].forEach((d, i) => {
+    const L = r * (i > 5 ? .7 : 1);
+    s += `<path d="M0 0 C${f1(-L * .3)} ${f1(-L * .3)} ${f1(-L * .28)} ${f1(-L * .9)} 0 ${f1(-L)} C${f1(L * .28)} ${f1(-L * .9)} ${f1(L * .3)} ${f1(-L * .3)} 0 0 Z" transform="translate(${f1(x)} ${f1(y)}) rotate(${d})" fill="${fill}" fill-opacity=".7" stroke="${edge}" stroke-width=".9"/>`;
+  });
+  return s;
+}
+function pineCrassula(x, y, h) {
+  let s = stem(`M${x} ${y} C${x - 2} ${y - h * .4} ${x + 3} ${y - h * .7} ${x} ${y - h}`, 1.6, "#9b8a74");
+  s += stem(`M${x} ${y - h * .45} Q${x + 14} ${y - h * .6} ${x + 18} ${y - h * .85}`, 1.2, "#9b8a74");
+  const tips = [[x, y - h], [x + 18, y - h * .85]];
+  for (let i = 0; i < 6; i++) { const yy = y - h * (.2 + i * .14); tips.push([x + (i % 2 ? 1 : -1), yy]); }
+  tips.forEach(([px, py], j) => {
+    [-60, -30, 30, 60, -10, 10].forEach((d, k) => { if (j > 1 && k > 3) return; s += lanceLeaf(px, py, 13, 1.6, -90 + d, 2); });
+  });
+  return s;
+}
+function oxTongue(x, y, deg, L) {
+  let dots = ""; _seed = 53;
+  for (let i = 0; i < 26; i++) dots += `<circle cx="${f1((rnd() - .5) * L * .26)}" cy="${f1(-rnd() * L * .9 - 4)}" r=".9" fill="#f4f0d8"/>`;
+  return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${deg})"><path d="M${f1(-L * .14)} 0 C${f1(-L * .18)} ${f1(-L * .5)} ${f1(-L * .16)} ${f1(-L * .9)} 0 ${f1(-L)} C${f1(L * .16)} ${f1(-L * .9)} ${f1(L * .18)} ${f1(-L * .5)} ${f1(L * .14)} 0 Z" fill="var(--leaf)" fill-opacity=".9" stroke="${INK}" stroke-width=".9"/>${dots}</g>`;
+}
+function zebraLeaf(x, y, deg, L) {
+  let bands = "";
+  for (let i = 1; i < 7; i++) bands += `<path d="M${f1(-L * .1 * (1 - i / 8))} ${f1(-L * i / 7.5)} l${f1(L * .2 * (1 - i / 8))} 0" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>`;
+  return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${deg})"><path d="M${f1(-L * .12)} 0 C${f1(-L * .12)} ${f1(-L * .5)} ${f1(-L * .06)} ${f1(-L * .85)} 0 ${f1(-L)} C${f1(L * .06)} ${f1(-L * .85)} ${f1(L * .12)} ${f1(-L * .5)} ${f1(L * .12)} 0 Z" fill="var(--leaf)" fill-opacity=".95" stroke="${INK}" stroke-width=".8"/>${bands}</g>`;
+}
+
+const PLATES = {
+  hydrangeaBloom: () => plate("-26 0 330 284",
+    stem("M140 254 C140 220 139 170 140 110") +
+    leaf(139, 222, 62, 19, 200) + leaf(141, 222, 62, 19, -20) +
+    leaf(139, 168, 52, 16, 215) + leaf(141, 168, 52, 16, -35) +
+    head(140, 74, 50, "var(--water)", "var(--feed)") +
+    note(118, 50, 70, 26, ["Round head of", "small 4-petal", "florets"], "end") +
+    note(171, 92, 196, 104, ["Blue on acid soil,", "pink on chalky"]) +
+    note(96, 206, 72, 168, ["Big glossy,", "toothed leaves"], "end") +
+    note(141, 222, 196, 236, ["Leaves in", "opposite pairs"]) +
+    `<text x="140" y="278" text-anchor="middle" class="pt">summer, in flower</text>`,
+    "Textbook drawing of bigleaf hydrangea in flower: a round head of small four-petal florets above big toothed leaves in opposite pairs", "var(--water-bg)"),
+
+  hydrangeaRest: () => plate("-26 0 330 284",
+    stem("M140 254 C140 210 138 150 140 98", 3.2, "var(--soil)") +
+    stem("M140 200 C150 180 170 160 182 140", 2.6, "var(--soil)") +
+    bud(137, 232, -55) + bud(143, 232, 55) +
+    bud(138, 176, -55) + bud(142, 176, 55) +
+    bud(176, 150, -10, .85) + bud(140, 98, 0, 1.1) +
+    head(140, 72, 34, "var(--sun)", "var(--soil)", 30, .3) +
+    note(114, 64, 72, 40, ["Old flower head", "dries papery tan"], "end") +
+    note(145, 172, 196, 168, ["Fat buds in pairs:", "next year's flowers"]) +
+    note(140, 240, 72, 232, ["Bare, light brown", "woody stems"], "end") +
+    `<text x="140" y="278" text-anchor="middle" class="pt">winter, leaves dropped</text>`,
+    "Textbook drawing of bigleaf hydrangea resting in winter: bare woody stems with fat paired buds and a dried papery flower head", "var(--soil-bg)"),
+
+  hydrangeaSnipSummer: () => plate("-24 0 284 246",
+    stem("M110 214 C110 180 109 130 110 70") +
+    leaf(109, 196, 48, 15, 205) + leaf(111, 196, 48, 15, -25) +
+    leaf(109, 132, 40, 13, 215) + leaf(111, 132, 40, 13, -35) +
+    leaf(109, 92, 14, 5, 230, 4) + leaf(111, 92, 14, 5, -50, 4) +
+    head(110, 48, 32, "var(--water)", "var(--muted)", 32, .25) +
+    note(92, 40, 56, 22, ["Fading flower"], "end") +
+    note(114, 92, 158, 82, ["Small leaves:", "skip these"]) +
+    snip(86, 134, 122, ["Snip here, above", "the first pair of", "full-size leaves"], 156) +
+    note(111, 194, 158, 200, ["Buds lower down:", "next year's flowers"]) +
+    `<text x="120" y="240" text-anchor="middle" class="pt">summer · deadheading</text>`,
+    "Diagram: in summer, snip a fading flower stem just above the first pair of full-size leaves below the head"),
+
+  hydrangeaSnipSpring: () => plate("-24 0 284 246",
+    stem("M110 214 C110 180 109 130 110 70", 2.8, "var(--soil)") +
+    bud(107, 186, -55) + bud(113, 186, 55) +
+    bud(107, 124, -55, 1.15) + bud(113, 124, 55, 1.15) +
+    head(110, 48, 30, "var(--sun)", "var(--soil)", 28, .3) +
+    note(90, 40, 56, 22, ["Last year's", "dried head"], "end") +
+    snip(86, 134, 106, ["Snip here, just", "above the first", "fat buds"], 156) +
+    note(113, 184, 158, 196, ["Leave the rest", "of the stem"]) +
+    `<text x="120" y="240" text-anchor="middle" class="pt">spring · clearing old heads</text>`,
+    "Diagram: in spring, snip off last year's dried flower head just above the first pair of fat buds"),
+
+  heatherBloom: () => plate("-26 0 330 284",
+    heatherBush(["var(--feed)", "var(--pink)"], .7) +
+    note(118, 104, 92, 40, ["Spikes of tiny", "bell flowers,", "pink or purple"], "end") +
+    note(196, 176, 236, 196, ["Tiny scale-", "like leaves", "on the stems"]) +
+    note(150, 246, 214, 252, ["Wiry, woody,", "branching stems"]) +
+    `<text x="150" y="278" text-anchor="middle" class="pt">late summer to fall, in flower</text>`,
+    "Textbook drawing of heather in flower: wiry branching stems with tiny scale-like leaves and spikes of small pink and purple bell flowers", "var(--feed-bg)"),
+
+  heatherRest: () => plate("-26 0 330 284",
+    heatherBush(["var(--sun)", "var(--soil)"], .35) +
+    note(118, 104, 60, 46, ["Old flowers dry", "papery tan or rust"], "end") +
+    note(196, 150, 240, 150, ["Leaves stay", "green all year"]) +
+    `<text x="150" y="278" text-anchor="middle" class="pt">winter, resting</text>`,
+    "Textbook drawing of heather resting in winter: evergreen scale-like leaves with dried papery flower spikes", "var(--soil-bg)"),
+
+  heatherSnipSpring: () => (_seed = 5, plate("-24 0 284 246",
+    heatherStem([110, 226], [112, 40], 8, "var(--sun)", .4, { leafFrom: .32, flowerFrom: .7, step: .022 }) +
+    heatherStem([110, 226], [86, 196], -4, null, 0, { leaves: false }) + heatherStem([110, 226], [134, 196], 4, null, 0, { leaves: false }) +
+    note(112, 58, 56, 40, ["Last year's", "faded flowers"], "end") +
+    snip(86, 134, 99, ["Snip here, just", "below the old", "flowers"], 156) +
+    note(113, 140, 158, 150, ["Green leafy part:", "it regrows from here"]) +
+    note(111, 206, 158, 214, ["Bare brown wood:", "never cut here"]) +
+    `<text x="120" y="242" text-anchor="middle" class="pt">early spring · light haircut</text>`,
+    "Diagram: in early spring, snip heather just below last year's faded flowers, staying in the green leafy part and never into bare brown wood")),
+
+  urnBloom: () => plate("-26 0 330 284",
+    rosette(150, 232, 1.15, "var(--muted)", .32) +
+    brHead(150, 84, "var(--pink)") +
+    note(136, 64, 72, 34, ["Spiky pink", "flower head", "on a stalk"], "end") +
+    note(212, 196, 222, 150, ["Silvery leaves", "with pale bands"]) +
+    note(150, 236, 214, 262, ["Leaves form a cup", "that holds water"]) +
+    `<text x="150" y="280" text-anchor="middle" class="pt">flowering, once per rosette</text>`,
+    "Textbook drawing of an urn plant in flower: a rosette of arching silvery banded leaves forming a cup, with a spiky pink flower head on a stalk", "var(--feed-bg)"),
+
+  urnRest: () => plate("-26 0 330 284",
+    rosette(140, 222, 1.05, "var(--muted)", .3, 3) +
+    rosette(222, 250, .42, "var(--leaf)", .35) +
+    rosette(70, 254, .34, "var(--leaf)", .35) +
+    note(92, 160, 56, 120, ["Mom fades and", "browns after", "flowering"], "end") +
+    note(222, 236, 226, 196, ["Babies grow", "at the base"]) +
+    note(140, 226, 182, 274, ["Water cup", "in the center"]) +
+    `<text x="40" y="280" text-anchor="middle" class="pt">after flowering</text>`,
+    "Textbook drawing of an urn plant after flowering: the mother rosette browning, with small baby rosettes at its base", "var(--soil-bg)"),
+
+  urnSnipMom: () => plate("-24 0 284 246",
+    rosette(130, 172, .85, "var(--soil)", .3, 8) +
+    rosette(40, 208, .45, "var(--leaf)", .35) +
+    snip(96, 164, 184, ["Cut mom off", "here, close to", "the base"], 186) +
+    note(150, 118, 196, 98, ["Mom, mostly", "brown"]) +
+    note(36, 196, -10, 140, ["Leave the", "baby"]) +
+    `<text x="120" y="242" text-anchor="middle" class="pt">spring · removing the old mom</text>`,
+    "Diagram: in spring, once the mother rosette is mostly brown, cut her off close to the base and leave the baby rosette"),
+
+  inchBloom: () => plate("-26 0 330 284",
+    inchClump(true) +
+    note(219, 106, 222, 56, ["Small pink", "three-petal", "flowers"]) +
+    note(80, 176, 72, 140, ["Pointed leaves", "striped silver"], "end") +
+    note(150, 70, 96, 30, ["Trailing stems"], "end") +
+    `<text x="150" y="280" text-anchor="middle" class="pt">spring to fall, in flower</text>`,
+    "Textbook drawing of an inch plant in flower: trailing stems with pointed purple leaves striped silver and small three-petal pink flowers at the tips", "var(--feed-bg)"),
+
+  inchRest: () => plate("-26 0 330 284",
+    inchClump(false) +
+    note(80, 176, 72, 140, ["Silver stripes", "stay all year"], "end") +
+    note(196, 252, 214, 266, ["Leaf joints: it", "roots and", "branches here"]) +
+    `<text x="40" y="280" text-anchor="middle" class="pt">no flowers</text>`,
+    "Textbook drawing of an inch plant without flowers: trailing stems of silver-striped purple leaves, with the leaf joints marked", "var(--soil-bg)"),
+
+  inchSnip: () => plate("-24 0 284 246",
+    // 1: before
+    stem("M36 226 C38 180 34 130 38 64", 2, "var(--feed)") +
+    zebLeaf(37, 196, 30, 8, -160) + zebLeaf(36, 150, 30, 8, -20) + zebLeaf(37, 104, 28, 8, -160) + zebLeaf(38, 66, 22, 7, -30) +
+    [196, 150, 104].map(y => `<circle cx="37" cy="${y}" r="1.8" fill="${INK}"/>`).join("") +
+    `<path d="M14 142 L46 142" stroke="var(--foe)" stroke-width="1.6" stroke-dasharray="4 3"/>` +
+    // 2: after the cut, two shoots from the joint
+    stem("M120 226 C122 196 118 168 120 144", 2, "var(--feed)") +
+    `<path d="M116 144 L124 144" stroke="${INK}" stroke-width="1.6"/>` +
+    zebLeaf(121, 196, 30, 8, -160) + zebLeaf(120, 150, 30, 8, -20) +
+    stem("M120 152 C110 140 104 126 100 112", 1.4, "var(--feed)") + stem("M120 152 C130 140 136 128 142 116", 1.4, "var(--feed)") +
+    zebLeaf(100, 114, 14, 5, -120) + zebLeaf(142, 118, 14, 5, -60) +
+    `<circle cx="120" cy="152" r="1.8" fill="${INK}"/>` +
+    // 3: the cut piece rooting in a glass
+    `<path d="M192 150 L196 228 L236 228 L240 150" fill="none" stroke="${INK}" stroke-width="1.2"/>` +
+    `<path d="M193.5 176 L195.5 227 L236.5 227 L238.5 176 Z" fill="var(--water)" fill-opacity=".22"/>` +
+    stem("M216 214 C215 180 217 150 216 112", 1.8, "var(--feed)") +
+    zebLeaf(216, 132, 26, 7, -150) + zebLeaf(216, 116, 22, 7, -40) +
+    `<path d="M216 214 q-6 6 -10 10 M216 214 q2 7 0 12 M216 214 q6 5 10 8" fill="none" stroke="${INK}" stroke-width=".9"/>` +
+    `<text x="38" y="34" text-anchor="middle" class="pl"><tspan x="38">1. Snip just</tspan><tspan x="38" dy="10.4">above a joint</tspan></text>` +
+    `<text x="122" y="34" text-anchor="middle" class="pl"><tspan x="122">2. Two new</tspan><tspan x="122" dy="10.4">shoots grow</tspan></text>` +
+    `<text x="216" y="34" text-anchor="middle" class="pl"><tspan x="216">3. The cut piece</tspan><tspan x="216" dy="10.4">roots in water</tspan></text>` +
+    `<text x="120" y="242" text-anchor="middle" class="pt">any time · pinching back</text>`,
+    "Diagram: snip an inch plant stem just above a leaf joint; two new shoots grow from that joint, and the cut piece roots in water"),
+
+  spiderBloom: () => plate("-26 0 330 284",
+    spiderTuft(150, 172, 1.2) +
+    runner([150, 170], [-6, 246], 96, { flowers: true }) + runner([150, 170], [278, 236], 92, { flowers: true, baby: true }) +
+    note(150, 120, 96, 40, ["Long arching leaves,", "cream stripe down", "the middle"], "end") +
+    note(237, 164, 236, 52, ["Little white", "star flowers", "on runners"]) +
+    note(276, 230, 256, 270, ["A baby forms", "at the tip"], "end") +
+    `<text x="150" y="282" text-anchor="middle" class="pt">spring to fall, flowering</text>`,
+    "Textbook drawing of a spider plant: a tuft of arching striped leaves with long runners carrying small white star flowers and a baby plant at the tip", "var(--friend-bg)"),
+
+  spiderRest: () => plate("-26 0 330 284",
+    spiderTuft(150, 172, 1.2) +
+    runner([150, 170], [10, 250], 90, { baby: true }) + runner([150, 170], [282, 250], 90, { baby: true }) +
+    note(12, 244, -14, 116, ["Babies dangle,", "ready to pot"]) +
+    note(150, 120, 214, 50, ["Leaves stay", "striped all year"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">no flowers</text>`,
+    "Textbook drawing of a spider plant with baby plants dangling from runners on both sides", "var(--soil-bg)"),
+
+  spiderSnip: () => plate("-24 0 284 246",
+    spiderTuft(70, 170, 1) + runner([70, 168], [214, 206], 80, { baby: true }) +
+    `<path d="M118 126 L118 162" stroke="var(--foe)" stroke-width="1.6" stroke-dasharray="4 3"/>` +
+    `<g transform="translate(111 104) scale(.6)" fill="none" stroke="var(--foe)" stroke-width="2.4" stroke-linecap="round"><circle cx="5" cy="19" r="4"/><circle cx="17" cy="19" r="4"/><path d="M7.5 16 L19 1 M14.5 16 L3 1"/></g>` +
+    `<text x="134" y="104" class="pl snipl"><tspan x="134">Snip the runner here</tspan><tspan x="134" dy="10.4">to pot the baby</tspan></text>` +
+    note(70, 172, -16, 222, ["Cut old leaves off", "right at the base"]) +
+    `<text x="120" y="242" text-anchor="middle" class="pt">any time · babies and old leaves</text>`,
+    "Diagram: snip a spider plant runner near the mother to pot the baby, and cut old leaves off at the base"),
+
+  pothosVine: () => plate("-26 0 330 284",
+    vine([150, 50], [60, 250], -24) + vine([150, 50], [240, 254], 26) + vine([150, 50], [150, 262], 6, [.2, .42, .64, .86]) +
+    heartLeaf(150, 52, 30, -30) + heartLeaf(150, 52, 30, 30) + heartLeaf(150, 52, 26, 0) +
+    note(98, 130, 52, 92, ["Heart-shaped,", "waxy leaves with", "yellow streaks"], "end") +
+    note(204, 160, 212, 112, ["Little brown root", "bumps at each", "leaf joint"]) +
+    note(84, 170, -14, 40, ["Long trailing", "vines"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">all year, rarely flowers</text>`,
+    "Textbook drawing of a pothos: trailing vines of heart-shaped leaves streaked yellow, with small brown root bumps at each leaf joint", "var(--friend-bg)"),
+
+  pothosSnip: () => plate("-24 0 284 246",
+    stem("M40 226 C42 180 38 130 40 64", 2, "var(--leaf)") +
+    heartLeaf(40, 196, 26, -70) + heartLeaf(40, 150, 26, 70) + heartLeaf(40, 104, 24, -70) + heartLeaf(40, 66, 20, 60) +
+    [196, 150, 104].map(y => `<circle cx="40" cy="${y}" r="2.2" fill="var(--soil)" stroke="${INK}" stroke-width=".5"/>`).join("") +
+    `<path d="M12 138 L36 138" stroke="var(--foe)" stroke-width="1.6" stroke-dasharray="4 3"/>` +
+    `<path d="M150 170 L156 228 L224 228 L230 170 Z" fill="var(--soil-bg)" stroke="${INK}" stroke-width="1.2"/><path d="M146 170 L234 170" stroke="${INK}" stroke-width="2"/>` +
+    stem("M176 172 C175 150 178 128 176 104", 1.6, "var(--leaf)") + heartLeaf(176, 128, 22, -65) + heartLeaf(176, 106, 20, 55) +
+    stem("M204 172 C205 152 202 134 204 116", 1.6, "var(--leaf)") + heartLeaf(204, 136, 20, 60) + heartLeaf(204, 118, 18, -50) +
+    `<text x="40" y="34" text-anchor="middle" class="pl"><tspan x="40">1. Snip just above</tspan><tspan x="40" dy="10.4">a root bump</tspan></text>` +
+    `<text x="190" y="66" text-anchor="middle" class="pl"><tspan x="190">2. Poke cuttings back</tspan><tspan x="190" dy="10.4">into the same pot</tspan></text>` +
+    `<text x="120" y="242" text-anchor="middle" class="pt">spring · making it fuller</text>`,
+    "Diagram: snip a pothos vine just above a leaf joint with a root bump, then poke the cuttings back into the same pot to make it fuller"),
+
+  tomatoBloom: () => plate("-26 0 330 284",
+    stem("M150 266 C148 220 152 160 148 60", 3, "var(--leaf)") +
+    tomLeaf(149, 230, 56, 200) + tomLeaf(151, 200, 56, -20) + tomLeaf(150, 160, 50, 205) + tomLeaf(149, 120, 46, -25) + tomLeaf(149, 84, 34, 210) +
+    stem("M150 178 C168 176 180 182 188 196", 1.2, "var(--leaf)") + fruit(186, 206, 11, "var(--foe)") + fruit(204, 200, 9, "var(--friend)") + fruit(172, 210, 8, "var(--foe)") +
+    stem("M149 104 C130 100 118 96 108 92", 1.2, "var(--leaf)") + yStar(108, 90, 9) + yStar(122, 84, 8) + yStar(96, 100, 8) +
+    note(108, 90, 62, 52, ["Yellow star", "flowers in clusters"], "end") +
+    note(204, 200, 224, 160, ["Fruit start green,", "ripen red"]) +
+    note(122, 220, 100, 252, ["Fuzzy leaves of", "toothed leaflets"], "end") +
+    `<text x="150" y="282" text-anchor="middle" class="pt">summer, flowering and fruiting</text>`,
+    "Textbook drawing of a tomato plant: a fuzzy stem with leaves made of toothed leaflets, clusters of yellow star flowers and round fruit ripening from green to red", "var(--sun-bg)"),
+
+  tomatoYoung: () => plate("-26 0 330 284",
+    stem("M150 266 C149 230 151 190 150 150", 3, "var(--leaf)") +
+    tomLeaf(150, 236, 50, 200) + tomLeaf(150, 214, 50, -20) + tomLeaf(150, 186, 44, 210) + tomLeaf(150, 166, 40, -30) + tomLeaf(150, 150, 30, -90) +
+    note(110, 222, 60, 190, ["Leaves smell", "strongly when", "brushed"], "end") +
+    note(150, 160, 214, 130, ["Hairy green stem"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">spring, young plant</text>`,
+    "Textbook drawing of a young tomato plant with fuzzy toothed compound leaves", "var(--friend-bg)"),
+
+  tomatoSnip: () => plate("-24 0 284 246",
+    `<path d="M50 150 L60 232 L180 232 L190 150 Z" fill="var(--soil-bg)" stroke="${INK}" stroke-width="1.2"/><path d="M44 150 L196 150" stroke="${INK}" stroke-width="2"/>` +
+    `<path d="M120 156 q-14 20 -30 34 M120 156 q2 26 -4 48 M120 156 q16 18 34 30 M108 176 q-8 6 -16 6 M128 180 q10 6 16 14" fill="none" stroke="var(--soil)" stroke-width="1.6" stroke-linecap="round"/>` +
+    stem("M120 150 C119 120 121 80 120 40", 2.6, "var(--leaf)") + tomLeaf(120, 110, 40, 200) + tomLeaf(120, 80, 40, -20) +
+    snip(96, 144, 146, [], 0) + `<text x="152" y="112" class="pl snipl"><tspan x="152">Cut at soil level</tspan><tspan x="152" dy="10.4">when it stops</tspan><tspan x="152" dy="10.4">fruiting</tspan></text>` +
+    note(140, 186, 206, 206, ["Leave the roots", "to feed the soil"]) +
+    `<text x="120" y="244" text-anchor="middle" class="pt">fall · end of the season</text>`,
+    "Diagram: in fall, cut the tomato off at soil level and leave its roots in the pot to feed the soil"),
+
+  basilBloom: () => plate("-26 0 330 284",
+    basilPlant(true) +
+    note(145, 40, 84, 22, ["Spikes of small", "white flowers in rings"], "end") +
+    note(190, 200, 228, 176, ["Glossy leaves", "in opposite pairs"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">late summer, flowering</text>`,
+    "Textbook drawing of basil in flower: a square stem with glossy leaves in opposite pairs, topped by spikes of small white flowers in rings", "var(--friend-bg)"),
+
+  basilLeafy: () => plate("-26 0 330 284",
+    basilPlant(false) +
+    note(150, 72, 214, 40, ["New pairs of leaves", "at every tip"]) +
+    note(110, 200, 60, 170, ["Soft, rounded,", "glossy leaves"], "end") +
+    `<text x="150" y="282" text-anchor="middle" class="pt">summer, leafy</text>`,
+    "Textbook drawing of leafy basil with soft rounded glossy leaves in pairs", "var(--friend-bg)"),
+
+  basilSnip: () => plate("-24 0 284 246",
+    stem("M60 236 L60 60", 2.4, "var(--leaf)") +
+    basilLeaf(60, 200, 36, 200) + basilLeaf(60, 200, 36, -20) + basilLeaf(60, 150, 32, 200) + basilLeaf(60, 150, 32, -20) + basilLeaf(60, 104, 26, 220) + basilLeaf(60, 104, 26, -40) + basilLeaf(60, 64, 16, 240) + basilLeaf(60, 64, 16, -60) +
+    `<path d="M40 126 L80 126" stroke="var(--foe)" stroke-width="1.6" stroke-dasharray="4 3"/>` +
+    `<text x="60" y="30" text-anchor="middle" class="pl"><tspan x="60">Summer: pinch just</tspan><tspan x="60" dy="10.4">above a leaf pair</tspan></text>` +
+    stem("M180 236 L180 60", 1.6, "var(--soil)") +
+    basilSpike(180, 64, 160, "var(--soil-bg)") +
+    `<path d="M164 172 L196 172" stroke="var(--foe)" stroke-width="1.6" stroke-dasharray="4 3"/>` +
+    `<text x="180" y="30" text-anchor="middle" class="pl"><tspan x="180">Fall: once spikes are</tspan><tspan x="180" dy="10.4">brown and dry, snip</tspan><tspan x="180" dy="10.4">and rub out seeds</tspan></text>` +
+    `<text x="120" y="244" text-anchor="middle" class="pt">picking and seed saving</text>`,
+    "Diagram: in summer pinch basil just above a pair of leaves; in fall, once the flower spikes are brown and dry, snip them and rub out the seeds"),
+
+  swordBloom: () => plate("-26 0 330 284",
+    rosette(150, 232, 1.15, "var(--leaf)", .45, 0, false) +
+    sword(150, 26, 196) +
+    note(162, 80, 200, 46, ["Flat, feather-", "shaped spike of", "yellow bracts"]) +
+    note(222, 190, 244, 140, ["Smooth,", "soft leaves"]) +
+    note(150, 236, 214, 262, ["Leaves form a cup", "that holds water"]) +
+    `<text x="150" y="280" text-anchor="middle" class="pt">flowering, once per rosette</text>`,
+    "Textbook drawing of a flaming sword bromeliad: a rosette of smooth leaves forming a cup, with a flat feather-shaped yellow flower spike", "var(--sun-bg)"),
+
+  swordRest: () => plate("-26 0 330 284",
+    rosette(140, 222, 1.05, "var(--leaf)", .42, 3, false) +
+    rosette(222, 250, .42, "var(--leaf)", .45, 0, false) +
+    rosette(70, 254, .34, "var(--leaf)", .45, 0, false) +
+    note(92, 160, 56, 120, ["Mom fades and", "browns after", "flowering"], "end") +
+    note(222, 236, 226, 196, ["Babies grow", "at the base"]) +
+    `<text x="40" y="280" text-anchor="middle" class="pt">after flowering</text>`,
+    "Textbook drawing of a flaming sword after flowering: the mother rosette browning with baby rosettes at its base", "var(--soil-bg)"),
+
+  pepperBloom: () => plate("-26 0 330 284",
+    stem("M150 266 C150 230 150 200 150 170", 3, "var(--leaf)") +
+    stem("M150 170 C136 150 120 130 104 104", 2.4, "var(--leaf)") + stem("M150 170 C164 150 182 130 196 104", 2.4, "var(--leaf)") + stem("M150 170 L150 96", 2.2, "var(--leaf)") +
+    [[150, 220, 34, 200], [150, 220, 34, -20], [128, 140, 30, 220], [172, 140, 30, -40], [104, 106, 26, 230], [196, 106, 26, -50], [150, 100, 24, 250], [150, 100, 24, -70], [116, 122, 24, 160], [184, 122, 24, 20]].map(([x, y, l, d]) => basilLeaf(x, y, l, d)).join("") +
+    pod(136, 150, 40, "var(--foe)", 8) + pod(166, 152, 36, "var(--friend)", -8) + pod(190, 116, 30, "var(--foe)", -14) +
+    nodFlower(112, 118, 9) + nodFlower(150, 92, 8) +
+    note(112, 120, 60, 70, ["Small white", "nodding flowers"], "end") +
+    note(194, 140, 230, 186, ["Peppers hang", "down, green", "then red"]) +
+    note(150, 222, 214, 240, ["Smooth, pointed", "glossy leaves"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">summer, flowering and fruiting</text>`,
+    "Textbook drawing of a pepper plant: smooth pointed leaves, small white nodding flowers and peppers hanging down, green and red", "var(--sun-bg)"),
+
+  pepperSeedling: () => plate("-26 0 330 284",
+    `<path d="M70 240 Q150 228 230 240" fill="none" stroke="var(--soil)" stroke-width="3"/>` +
+    stem("M150 238 C150 214 149 190 150 160", 2.4, "var(--leaf)") +
+    basilLeaf(150, 196, 30, 190) + basilLeaf(150, 196, 30, -10) +
+    basilLeaf(150, 162, 36, 235) + basilLeaf(150, 162, 36, -55) + basilLeaf(150, 160, 18, -90) +
+    note(118, 196, 62, 214, ["Two narrow", "seed leaves"], "end") +
+    note(170, 140, 214, 118, ["First pointed", "true leaves"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">just coming up</text>`,
+    "Textbook drawing of a pepper seedling with two narrow seed leaves and its first pointed true leaves", "var(--friend-bg)"),
+
+  pepperSnip: () => plate("-24 0 284 246",
+    stem("M40 30 C80 34 110 40 140 52", 2.4, "var(--leaf)") +
+    basilLeaf(70, 34, 30, -60) + basilLeaf(110, 42, 30, 210) +
+    stem("M120 46 C122 56 122 64 121 74", 1.4, "var(--leaf)") +
+    pod(121, 80, 86, "var(--foe)", 0) +
+    `<path d="M108 68 L134 68" stroke="var(--foe)" stroke-width="1.6" stroke-dasharray="4 3"/>` +
+    `<g transform="translate(138 65) scale(.6)" fill="none" stroke="var(--foe)" stroke-width="2.4" stroke-linecap="round"><circle cx="5" cy="19" r="4"/><circle cx="17" cy="19" r="4"/><path d="M7.5 16 L19 1 M14.5 16 L3 1"/></g>` +
+    `<text x="158" y="70" class="pl snipl"><tspan x="158">Snip the little</tspan><tspan x="158" dy="10.4">stem, don't pull</tspan></text>` +
+    `<text x="158" y="130" class="pl"><tspan x="158">Pick at any color:</tspan><tspan x="158" dy="10.4">green is fine,</tspan><tspan x="158" dy="10.4">red is sweeter</tspan></text>` +
+    `<text x="120" y="244" text-anchor="middle" class="pt">summer and fall · picking</text>`,
+    "Diagram: snip a pepper off by its little stem instead of pulling, at any color"),
+
+  strawBloom: () => plate("-26 0 330 284",
+    `<path d="M70 236 Q150 226 230 236" fill="none" stroke="var(--soil)" stroke-width="3"/>` +
+    trifol(150, 232, 70, 0) + trifol(146, 232, 60, -38) + trifol(154, 232, 60, 38) + trifol(148, 232, 44, -70) + trifol(152, 232, 44, 70) +
+    stem("M150 232 C120 210 108 196 100 184", 1.2, "var(--leaf)") + whiteFlower(100, 180, 10) +
+    stem("M150 232 C180 220 196 210 204 200", 1.2, "var(--leaf)") + berry(206, 210, 10) +
+    stem("M150 232 C174 214 186 200 190 186", 1.2, "var(--leaf)") + whiteFlower(190, 182, 9) +
+    note(96, 176, 56, 140, ["White flowers,", "yellow center"], "end") +
+    note(212, 214, 226, 252, ["Red berry,", "seeds outside"]) +
+    note(150, 140, 214, 92, ["Leaves in threes,", "toothed edges"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">late spring to summer</text>`,
+    "Textbook drawing of a strawberry plant: leaves in threes with toothed edges, white five-petal flowers and a red berry", "var(--foe-bg)"),
+
+  strawLeafy: () => plate("-26 0 330 284",
+    `<path d="M40 236 Q150 226 260 236" fill="none" stroke="var(--soil)" stroke-width="3"/>` +
+    trifol(120, 232, 60, -10) + trifol(116, 232, 50, -45) + trifol(124, 232, 50, 30) +
+    stem("M124 230 C170 200 210 210 238 228", 1.1, "var(--soil)") +
+    trifol(238, 230, 26, -10) + trifol(238, 230, 22, 30) +
+    `<path d="M234 232 l-3 6 M238 232 l0 7 M242 232 l3 6" stroke="${INK}" stroke-width=".8"/>` +
+    note(180, 206, 196, 160, ["Runner"]) +
+    note(240, 214, 236, 120, ["Baby plant", "roots where", "it lands"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">summer, sending out runners</text>`,
+    "Textbook drawing of a strawberry plant sending a runner out to a baby plant that roots where it lands", "var(--friend-bg)"),
+
+  strawSnip: () => plate("-24 0 284 246",
+    `<path d="M10 206 Q130 196 250 206" fill="none" stroke="var(--soil)" stroke-width="3"/>` +
+    trifol(60, 202, 56, -10) + trifol(56, 202, 46, -45) + trifol(64, 202, 46, 30) +
+    stem("M64 200 C110 170 170 180 210 198", 1.1, "var(--soil)") + trifol(210, 200, 26, -10) + trifol(210, 200, 22, 30) +
+    `<path d="M104 166 L104 196" stroke="var(--foe)" stroke-width="1.6" stroke-dasharray="4 3"/>` +
+    `<g transform="translate(97 146) scale(.6)" fill="none" stroke="var(--foe)" stroke-width="2.4" stroke-linecap="round"><circle cx="5" cy="19" r="4"/><circle cx="17" cy="19" r="4"/><path d="M7.5 16 L19 1 M14.5 16 L3 1"/></g>` +
+    `<text x="120" y="120" class="pl snipl"><tspan x="120">Only once the pot is full:</tspan><tspan x="120" dy="10.4">snip the runner near mom</tspan></text>` +
+    `<text x="120" y="232" text-anchor="middle" class="pt">otherwise let them root</text>`,
+    "Diagram: once the pot is full, snip a strawberry runner near the mother plant; otherwise let runners root"),
+  onionBloom: () => plate("-26 0 330 284",
+    `<path d="M60 236 Q150 226 240 236" fill="none" stroke="var(--soil)" stroke-width="3"/>` +
+    onionClump(150, 232) + scape(140, 216, 70, 1.4) + scape(164, 216, 92, 1.2) + umbel(140, 60, 15) + umbel(164, 82, 13) +
+    note(127, 56, 70, 40, ["Ball of tiny", "cream flowers"], "end") +
+    note(165, 150, 232, 150, ["Hollow round", "leaves"]) +
+    note(138, 228, 70, 210, ["Slim white base,", "no big bulb"], "end") +
+    `<text x="150" y="282" text-anchor="middle" class="pt">late spring to summer</text>`,
+    "Textbook drawing of a green onion in bloom: hollow round leaves, slim white bases and round balls of tiny cream flowers on tall stalks", "var(--sun-bg)"),
+
+  onionLeafy: () => plate("-26 0 330 284",
+    `<path d="M60 236 Q150 226 240 236" fill="none" stroke="var(--soil)" stroke-width="3"/>` +
+    onionClump(150, 232) +
+    note(165, 150, 232, 150, ["Hollow round", "leaves"]) +
+    note(138, 228, 70, 210, ["Slim white base,", "no big bulb"], "end") +
+    `<text x="150" y="282" text-anchor="middle" class="pt">most of the year</text>`,
+    "Textbook drawing of a green onion: a clump of upright hollow round leaves from slim white bases", "var(--friend-bg)"),
+
+  onionSnip: () => plate("-24 0 284 246",
+    `<path d="M40 206 Q120 198 200 206" fill="none" stroke="var(--soil)" stroke-width="3"/>` +
+    onionClump(120, 202, .82) +
+    snip(84, 150, 168, [], 0) + `<text x="168" y="152" class="pl snipl"><tspan x="168">Cut a finger's</tspan><tspan x="168" dy="10.4">width above</tspan><tspan x="168" dy="10.4">the soil</tspan></text>` +
+    note(128, 202, 176, 226, ["It regrows", "from the base"]) +
+    `<text x="120" y="244" text-anchor="middle" class="pt">any time you want some</text>`,
+    "Diagram: cut green onion leaves a finger's width above the soil; it regrows from the base"),
+  monsteraVine: () => plate("-36 0 350 284",
+    monsVine([150, 46], [64, 254], -26) + monsVine([150, 46], [236, 258], 24) + monsVine([150, 46], [152, 266], 6, [.22, .46, .7, .92]) +
+    holeLeaf(150, 50, 36, -32) + holeLeaf(150, 50, 36, 30) +
+    note(196, 156, 232, 120, ["Oval holes", "between veins"]) +
+    note(116, 150, 46, 110, ["Pointed, slightly", "lopsided leaves"], "end") +
+    note(203, 214, 256, 190, ["Thin brown", "air roots"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">all year, rarely flowers</text>`,
+    "Textbook drawing of a Monstera adansonii: trailing vines of pointed oval leaves with oval holes, and thin brown air roots at each leaf joint", "var(--friend-bg)"),
+
+  monsteraSnip: () => plate("-24 0 284 246",
+    stem("M40 226 C42 180 38 130 40 64", 2, "var(--leaf)") +
+    holeLeaf(40, 196, 30, -68) + holeLeaf(40, 150, 30, 68) + holeLeaf(40, 104, 28, -68) + holeLeaf(40, 66, 24, 60) +
+    [196, 150, 104].map((y, i) => `<path d="M40 ${y} q${i % 2 ? -3 : 3} 7 ${i % 2 ? -1 : 1} 14" fill="none" stroke="var(--soil)" stroke-width="1.1" stroke-linecap="round"/>`).join("") +
+    `<path d="M12 138 L36 138" stroke="var(--foe)" stroke-width="1.6" stroke-dasharray="4 3"/>` +
+    `<path d="M150 170 L156 228 L224 228 L230 170 Z" fill="var(--soil-bg)" stroke="${INK}" stroke-width="1.2"/><path d="M146 170 L234 170" stroke="${INK}" stroke-width="2"/>` +
+    stem("M176 172 C175 150 178 128 176 104", 1.6, "var(--leaf)") + holeLeaf(176, 130, 24, -62) + holeLeaf(176, 108, 22, 55) +
+    stem("M204 172 C205 152 202 134 204 116", 1.6, "var(--leaf)") + holeLeaf(204, 138, 22, 60) + holeLeaf(204, 120, 20, -50) +
+    `<text x="40" y="34" text-anchor="middle" class="pl"><tspan x="40">1. Snip just above</tspan><tspan x="40" dy="10.4">an air root</tspan></text>` +
+    `<text x="190" y="66" text-anchor="middle" class="pl"><tspan x="190">2. Poke cuttings back</tspan><tspan x="190" dy="10.4">into the same pot</tspan></text>` +
+    `<text x="120" y="242" text-anchor="middle" class="pt">whenever it gets too long</text>`,
+    "Diagram: snip a Monstera adansonii vine just above an air root, then poke the cuttings back into the same pot"),
+  gingerPlant: () => plate("-46 0 370 284",
+    gingerStalk(130, 222, 170, -14) + gingerStalk(156, 224, 196, 6, 7) + gingerStalk(178, 222, 150, 22) +
+    rhizome(152, 228) +
+    `<path d="M50 232 Q150 224 250 232" fill="none" stroke="var(--soil)" stroke-width="3"/>` +
+    note(206, 120, 244, 84, ["Long, narrow", "leaves, two rows"]) +
+    note(128, 176, 60, 150, ["Reed-like", "stalks"], "end") +
+    note(186, 233, 222, 256, ["Knobbly root:", "the ginger you eat"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">spring to fall, rarely flowers</text>`,
+    "Textbook drawing of a ginger plant: reed-like stalks with long narrow leaves in two rows, rising from a knobbly tan root at the soil surface", "var(--sun-bg)"),
+
+  gingerSnip: () => plate("-24 0 284 246",
+    `<path d="M30 140 L40 214 L200 214 L210 140 Z" fill="var(--soil-bg)" stroke="${INK}" stroke-width="1.2"/><path d="M24 140 L216 140" stroke="${INK}" stroke-width="2"/>` +
+    stem("M110 146 C108 110 112 80 110 50", 1.6, "var(--leaf)") + stem("M130 146 C132 116 128 96 132 70", 1.6, "var(--leaf)") +
+    lanceLeaf(110, 80, 34, 4, -150, 6) + lanceLeaf(110, 64, 30, 4, -30, 6) + lanceLeaf(131, 96, 32, 4, -30, 6) +
+    rhizome(118, 150, .9) +
+    `<path d="M152 132 L152 166" stroke="var(--foe)" stroke-width="1.6" stroke-dasharray="4 3"/>` +
+    `<text x="164" y="100" class="pl snipl"><tspan x="164">Break off a piece</tspan><tspan x="164" dy="10.4">at the pot's edge</tspan></text>` +
+    note(100, 154, 84, 122, ["Leave the rest", "to keep growing"], "end") +
+    `<text x="120" y="236" text-anchor="middle" class="pt">harvest · late summer to fall</text>`,
+    "Diagram: break off a piece of ginger root at the edge of the pot and leave the rest to keep growing"),
+  lavenderBloom: () => plate("-26 0 330 284",
+    `<path d="M60 238 Q150 230 240 238" fill="none" stroke="var(--soil)" stroke-width="3"/>` +
+    lavBush(true) +
+    note(140, 76, 80, 50, ["Spikes of tiny", "purple flowers"], "end") +
+    note(200, 200, 238, 176, ["Narrow grey-", "green leaves"]) +
+    note(146, 228, 56, 252, ["Woody grey", "base"], "end") +
+    `<text x="150" y="280" text-anchor="middle" class="pt">early to late summer</text>`,
+    "Textbook drawing of lavender in flower: a woody grey base, tufts of narrow grey-green leaves and long stalks topped with spikes of tiny purple flowers", "var(--feed-bg)"),
+
+  lavenderRest: () => plate("-26 0 330 284",
+    `<path d="M60 238 Q150 230 240 238" fill="none" stroke="var(--soil)" stroke-width="3"/>` +
+    lavBush(false) +
+    note(200, 200, 238, 176, ["Narrow grey-", "green leaves"]) +
+    note(146, 228, 56, 252, ["Woody grey", "base"], "end") +
+    `<text x="150" y="280" text-anchor="middle" class="pt">fall to spring, a grey-green mound</text>`,
+    "Textbook drawing of lavender out of flower: a low mound of narrow grey-green leaves on a woody grey base", "var(--friend-bg)"),
+
+  lavenderSnip: () => plate("-24 0 284 246",
+    `<path d="M40 214 Q120 206 200 214" fill="none" stroke="var(--soil)" stroke-width="3"/>` +
+    lavBush(true, .78, 110, 212) +
+    snip(40, 172, 156, [], 0) + `<text x="190" y="142" class="pl snipl"><tspan x="190">Cut off the old</tspan><tspan x="190" dy="10.4">flower stalks, just</tspan><tspan x="190" dy="10.4">into the leaves</tspan></text>` +
+    note(112, 200, 176, 196, ["Never into the", "woody grey stem"]) +
+    `<text x="120" y="238" text-anchor="middle" class="pt">late summer · after the bees are done</text>`,
+    "Diagram: after flowering, cut lavender back by a third, staying in the green leafy part and never into the woody grey stem"),
+  jasmineBloom: () => plate("-36 0 350 284",
+    `<path d="M150 266 L150 30" stroke="#b8a888" stroke-width="2.4"/><path d="M110 266 L190 266" stroke="var(--soil)" stroke-width="3"/>` +
+    jasVine([150, 262], [110, 160], [168, 40], [.18, .38, .58, .78], [[.5, 3], [.92, 4]]) +
+    jasVine([150, 262], [210, 190], [218, 110], [.3, .5, .7], [[.86, 3]]) +
+    jasVine([150, 262], [96, 214], [84, 130], [.4, .62], [[.84, 3]]) +
+    note(150, 92, 72, 64, ["White pinwheel", "flowers, sweet", "scent at night"], "end") +
+    note(124, 220, 50, 236, ["Glossy dark", "leaves in pairs"], "end") +
+    note(212, 168, 244, 190, ["Woody, twining", "stems"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">early to mid summer</text>`,
+    "Textbook drawing of star jasmine in flower: woody twining stems with glossy dark oval leaves in pairs and clusters of white pinwheel-shaped flowers", "var(--water-bg)"),
+
+  jasmineRest: () => plate("-36 0 350 284",
+    `<path d="M150 266 L150 30" stroke="#b8a888" stroke-width="2.4"/><path d="M110 266 L190 266" stroke="var(--soil)" stroke-width="3"/>` +
+    jasVine([150, 262], [110, 160], [168, 40], [.18, .38, .58, .78, .94]) +
+    jasVine([150, 262], [210, 190], [218, 110], [.3, .5, .7, .9]) +
+    jasVine([150, 262], [96, 214], [84, 130], [.4, .62, .86]) +
+    note(124, 220, 50, 236, ["Glossy dark", "leaves in pairs"], "end") +
+    note(212, 168, 244, 190, ["Woody, twining", "stems"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">fall to spring, evergreen</text>`,
+    "Textbook drawing of star jasmine out of flower: woody twining stems with glossy dark oval leaves in pairs, green all year", "var(--friend-bg)"),
+
+  jasmineSnip: () => plate("-24 0 284 246",
+    jasVine([60, 220], [70, 140], [150, 70], [.2, .45, .7, .92], null, .9) +
+    snip(86, 122, 128, [], 0) + `<text x="144" y="116" class="pl snipl"><tspan x="144">Only if it's in the</tspan><tspan x="144" dy="10.4">way: snip just</tspan><tspan x="144" dy="10.4">above a leaf pair</tspan></text>` +
+    `<text x="120" y="244" text-anchor="middle" class="pt">summer · right after flowering</text>`,
+    "Diagram: right after flowering, snip a stray star jasmine shoot just above a pair of leaves, only if it's in the way"),
+  mgBloom: () => plate("-36 0 350 284",
+    mgPlant(true) +
+    note(200, 70, 232, 46, ["Trumpet flowers,", "open mornings"]) +
+    note(122, 200, 52, 214, ["Heart-shaped", "leaves"], "end") +
+    note(197, 236, 236, 250, ["Round seed", "pods"]) +
+    note(150, 26, 80, 30, ["Twines up", "any support"], "end") +
+    `<text x="150" y="282" text-anchor="middle" class="pt">summer to fall</text>`,
+    "Textbook drawing of a morning glory in flower: a twining vine of heart-shaped leaves with purple trumpet flowers and round seed pods", "var(--feed-bg)"),
+
+  mgRest: () => plate("-36 0 350 284",
+    mgPlant(false) +
+    note(122, 200, 52, 214, ["Heart-shaped", "leaves"], "end") +
+    note(150, 26, 80, 30, ["Twines up", "any support"], "end") +
+    `<text x="150" y="282" text-anchor="middle" class="pt">spring, climbing</text>`,
+    "Textbook drawing of a morning glory out of flower: a twining vine of heart-shaped leaves climbing a support", "var(--friend-bg)"),
+
+  mgWait: () => plate("-24 0 284 246",
+    `<path d="M30 206 L210 206" stroke="var(--soil)" stroke-width="3"/>` +
+    `<path d="M70 204 C66 160 76 120 68 80 C62 56 72 40 66 26" fill="none" stroke="#a89878" stroke-width="2"/><path d="M68 120 q-14 -6 -18 -18 M70 90 q12 -4 16 -16" fill="none" stroke="#a89878" stroke-width="1.2"/>` +
+    `<text x="66" y="224" text-anchor="middle" class="pt"><tspan x="66">winter: leave</tspan><tspan x="66" dy="10">it standing</tspan></text>` +
+    `<path d="M108 120 L128 120" stroke="${INK}" stroke-width="1.2"/><path d="M124 116 L128 120 L124 124" fill="none" stroke="${INK}" stroke-width="1.2"/>` +
+    stem("M172 204 C170 186 174 172 172 160", 1.2, "var(--leaf)") + mgLeaf(172, 176, 16, -60) + mgLeaf(172, 164, 14, 55) +
+    `<text x="172" y="120" text-anchor="middle" class="pl"><tspan x="172">Sprouts from the</tspan><tspan x="172" dy="10.4">base in spring?</tspan><tspan x="172" dy="10.4">It's the perennial.</tspan></text>` +
+    `<text x="172" y="224" text-anchor="middle" class="pt"><tspan x="172">nothing back? it was</tspan><tspan x="172" dy="10">the annual: pull it then</tspan></text>`,
+    "Diagram: leave the dead morning glory vine standing over winter; if it sprouts from the base in spring it's the perennial, if not it was the annual"),
+  succBox: () => plate("-36 0 350 284",
+    `<path d="M-4 236 L8 262 L292 262 L304 236 Z" fill="var(--soil-bg)" stroke="${INK}" stroke-width="1.2"/><path d="M-10 236 L310 236" stroke="${INK}" stroke-width="2"/>` +
+    stem("M44 234 C42 200 48 170 46 130", 2.4, "#9b8a74") + stem("M46 190 Q30 180 24 160", 1.8, "#9b8a74") +
+    rosetteSide(46, 132, 30, "var(--leaf)", "var(--pink)") + rosetteSide(24, 160, 18, "var(--leaf)", "var(--pink)") +
+    pineCrassula(104, 234, 96) +
+    rosetteSide(160, 232, 20, "#d9c7e4", "var(--feed)") + rosetteSide(178, 234, 13, "#d9c7e4", "var(--feed)") +
+    oxTongue(216, 234, -14, 52) + oxTongue(226, 234, 18, 44) +
+    [-26, -12, 0, 12, 26].map((d, i) => zebraLeaf(270, 234, d, 34 + (i % 2) * 8)).join("") +
+    note(52, 108, 64, 58, ["Aeonium:", "rosettes on", "woody stems"]) +
+    note(110, 140, 120, 96, ["Pine tree", "crassula"]) +
+    note(160, 214, 172, 176, ["Ghost plant"]) +
+    note(220, 196, 226, 140, ["Ox tongue:", "white freckles"]) +
+    note(272, 200, 280, 166, ["Zebra", "plant"]) +
+    `<text x="150" y="280" text-anchor="middle" class="pt">all year, east balcony box</text>`,
+    "Textbook drawing of the succulent box: aeonium rosettes on woody stems, a pine-tree crassula, pale lilac ghost plant rosettes, freckled ox tongue leaves and a white-striped zebra plant", "var(--friend-bg)"),
+
+  succSnip: () => plate("-24 0 284 246",
+    `<path d="M20 200 L220 200" stroke="var(--soil)" stroke-width="3"/>` +
+    `<g transform="translate(48 196) rotate(-80)"><path d="M0 0 C-6 -4 -6 -20 0 -26 C6 -20 6 -4 0 0 Z" fill="#d9c7e4" stroke="${INK}" stroke-width=".8"/></g>` +
+    `<text x="48" y="226" text-anchor="middle" class="pt"><tspan x="48">a leaf drops</tspan></text>` +
+    `<path d="M84 180 L104 180" stroke="${INK}" stroke-width="1.2"/><path d="M100 176 L104 180 L100 184" fill="none" stroke="${INK}" stroke-width="1.2"/>` +
+    `<g transform="translate(150 196) rotate(-80)"><path d="M0 0 C-6 -4 -6 -20 0 -26 C6 -20 6 -4 0 0 Z" fill="#d9c7e4" stroke="${INK}" stroke-width=".8"/></g>` +
+    `<path d="M150 198 l-4 10 M151 198 l1 12 M152 198 l5 9" stroke="var(--soil)" stroke-width=".8"/>` + rosetteSide(152, 192, 8, "#d9c7e4", "var(--feed)") +
+    `<text x="160" y="226" text-anchor="middle" class="pt"><tspan x="160">it roots and makes a baby</tspan></text>` +
+    `<text x="120" y="150" text-anchor="middle" class="pl"><tspan x="120">Let fallen leaves and broken</tspan><tspan x="120" dy="10.4">bits root where they land</tspan></text>`,
+    "Diagram: a fallen succulent leaf left on the soil roots and grows a baby rosette"),
+};
+const ICON = {
+  water: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c-.3 0-.6.2-.8.4C9.4 5.3 5.5 10.6 5.5 14.5a6.5 6.5 0 0 0 13 0c0-3.9-3.9-9.2-5.7-11.6-.2-.2-.5-.4-.8-.4z"/></svg>',
+  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 1.8v2.6M12 19.6v2.6M1.8 12h2.6M19.6 12h2.6M4.8 4.8l1.8 1.8M17.4 17.4l1.8 1.8M4.8 19.2l1.8-1.8M17.4 6.6l1.8-1.8"/></svg>',
+  soil: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 14h18l-2 7H5z"/><circle cx="8" cy="10.5" r="2"/><circle cx="13" cy="9" r="2.4"/><circle cx="17.5" cy="11" r="1.7"/></svg>',
+  friend: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.3-9.4C1.4 8 3.7 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.7 1.2-1.6 2.8-2.7 4.8-2.7 3.5 0 5.8 3.5 4.5 7.1C19.5 16.4 12 21 12 21z"/></svg>',
+  foe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>',
+  feed: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 2h6v3l3 4v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9l3-4z"/></svg>',
+  prune: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8 16L19 3M16 16L5 3"/></svg>',
+};
+const SWASH = '<svg class="swash" viewBox="0 0 92 9" aria-hidden="true"><path d="M2 6 C 22 2, 44 8, 62 4 S 84 3, 90 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".55"/></svg>';
+const RING = '<svg class="ring" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path d="M8 22 C 6 8, 40 3, 70 5 S 99 18, 92 28 S 50 40, 24 36 S 2 26, 14 12" fill="none" stroke="var(--prune)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round"/></svg>';
+const WAVE = '<svg class="wave" viewBox="0 0 400 22" preserveAspectRatio="none" aria-hidden="true"><path d="M0 12 C 50 2, 90 20, 140 11 S 230 3, 280 12 S 360 20, 400 9" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round"/></svg>';
+
+const SEASON_NAMES = { spring: "Spring", summer: "Summer", fall: "Fall", winter: "Winter" };
+function currentSeason() {
+  const m = new Date().getMonth(); // northern hemisphere
+  return m >= 2 && m <= 4 ? "spring" : m >= 5 && m <= 7 ? "summer" : m >= 8 && m <= 10 ? "fall" : "winter";
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function art(id) { return PLATES[id] ? PLATES[id]() : ""; }
+
+function careNote(kind, title, inner) {
+  return `<section class="note n-${kind}"><div class="ico" aria-hidden="true">${ICON[kind]}</div><div class="body"><h2>${title}${SWASH}</h2>${inner}</div></section>`;
+}
+
+function renderPlant(key, p) {
+  const now = currentSeason();
+  document.title = p.common + " · Balcony Plant Cards";
+  const signs = list => (list || []).map(s => `<p class="sign">${esc(s)}</p>`).join("");
+  return `
+  <a class="back" href="#all"><span aria-hidden="true">←</span> All plants</a>
+  <header class="head">
+    <span class="where">${esc(p.where)}</span>
+    <h1>${esc(p.common)}</h1>
+    <p class="sci">${esc(p.sci)}</p>
+  </header>
+
+  <section class="pics${p.art.rest ? "" : " single"}" aria-label="What it looks like">
+    <figure class="pic">${art(p.art.bloom)}<figcaption>${esc(p.bloomTitle || "In bloom")}<span>${esc(p.bloomNote)}</span></figcaption></figure>
+    ${p.art.rest ? `<figure class="pic">${art(p.art.rest)}<figcaption>${esc(p.restTitle || "Not in bloom")}<span>${esc(p.restNote)}</span></figcaption></figure>` : ""}
+  </section>
+
+  ${WAVE}
+
+  <div class="care">
+    ${careNote("water", "Water", `<p class="lead">${esc(p.water.big)}</p><p>${esc(p.water.text)}</p>`)}
+    ${careNote("sun", "Sun", `<p class="lead">${esc(p.sun.big)}</p><p>${esc(p.sun.text)}</p>`)}
+    ${careNote("soil", "Soil mix", `<p class="mix">${p.soil.mix.map(m => `<b>${esc(m)}</b>`).join('<span class="plus">+</span>')}</p><p>${esc(p.soil.text)}</p>`)}
+    ${careNote("feed", "Fertilize", `<p><span class="yes">${esc(p.feed.big)}</span>${esc(p.feed.text)}</p>`)}
+    ${careNote("friend", "Can share a pot with", `<p>${esc(p.friends)}</p>`)}
+    ${careNote("foe", "Don't pot with", `<p>${esc(p.foes)}</p>`)}
+  </div>
+
+  <section class="prune" aria-label="Pruning">
+    <h2>${ICON.prune}Pruning</h2>
+    <p class="how">${esc(p.pruneHow)}</p>
+    ${p.pruneArt ? `<div class="snips">${p.pruneArt.map(([id]) => `<div class="snip">${art(id)}</div>`).join("")}</div>` : ""}
+    <div class="seasons">
+      ${Object.keys(SEASON_NAMES).map(s => `<div class="season"><h3>${SEASON_NAMES[s]}${s === now ? RING : ""}</h3>${s === now ? '<small>right now</small>' : ""}<p>${esc(p.seasons[s])}</p></div>`).join("")}
+    </div>
+  </section>
+
+  <p class="foot"><a href="#all">← Back to all plants</a></p>`;
+}
+
+const KIND_WASH = { food: "var(--sun-bg)", pretty: "var(--friend-bg)" };
+function thumb(id, kind) { BARE = true; WASH = KIND_WASH[kind]; const s = art(id); BARE = false; WASH = null; return s; }
+let VIEW = "gallery", KIND = "all", SIDE = "all";
+try { VIEW = localStorage.getItem("plantView") || "gallery"; KIND = localStorage.getItem("plantKind") || "all"; SIDE = localStorage.getItem("plantSide") || "all"; } catch (e) {}
+function remember(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function setView(v) { VIEW = v; remember("plantView", v); route(); }
+function setKind(v) { KIND = v; remember("plantKind", v); route(); }
+function setSide(v) { SIDE = v; remember("plantSide", v); route(); }
+const sideOf = p => p.where.toLowerCase().startsWith("west") ? "west" : "east";
+function toggles(label, cur, fn, opts) {
+  return `<div class="views" role="group" aria-label="${label}"><span class="vlabel">${label}</span>${opts.map(([v, txt], i) => `${i ? '<span aria-hidden="true">/</span>' : ""}<button type="button" id="${fn}-${v}" class="viewbtn${cur === v ? " on" : ""}" aria-pressed="${cur === v}" onclick="${fn}('${v}')">${txt}</button>`).join("")}</div>`;
+}
+function renderIndex() {
+  document.title = "Balcony Plant Cards";
+  const list = Object.entries(PLANTS).filter(([k, p]) => (KIND === "all" || p.kind === KIND) && (SIDE === "all" || sideOf(p) === SIDE));
+  return `
+  <header class="head"><span class="where">Both balconies</span><h1>Balcony plants</h1><p class="sci">Tap a plant, or scan its tag.</p></header>
+  <div class="filters">
+    ${toggles("Balcony", SIDE, "setSide", [["all", "Both"], ["east", "East"], ["west", "West"]])}
+    ${toggles("Type", KIND, "setKind", [["all", "All"], ["food", `<i class="dot" style="background:var(--sun-bg)"></i>Food & herbs`], ["pretty", `<i class="dot" style="background:var(--friend-bg)"></i>Flowers & leafy`]])}
+    ${toggles("Show as", VIEW, "setView", [["gallery", "Gallery"], ["list", "List"]])}
+  </div>
+  ${list.length ? `<nav class="index ${VIEW === "list" ? "as-list" : ""}">${list.map(([k, p]) => `<a href="#${k}"><span class="thumb">${thumb(p.art.bloom, p.kind)}</span><span class="names"><b>${esc(p.common)}</b><i>${esc(p.sci)}</i><small>${esc(p.where.split(" · ")[0])}</small></span></a>`).join("")}</nav>` : `<p class="sci">No plants match yet.</p>`}`;
+}
+
+function route() {
+  const key = location.hash.slice(1).toLowerCase();
+  const keys = Object.keys(PLANTS);
+  const app = document.getElementById("app");
+  app.innerHTML = PLANTS[key] ? renderPlant(key, PLANTS[key])
+    : key === "all" ? renderIndex()
+    : keys.length === 1 ? renderPlant(keys[0], PLANTS[keys[0]]) : renderIndex();
+  fitDrawings(app);
+  window.scrollTo(0, 0);
+}
+// trim each drawing's empty margins so it sits snugly under its heading
+function fitDrawings(root) {
+  root.querySelectorAll(".snip svg, .thumb svg").forEach(svg => {
+    try {
+      const b = svg.getBBox(), pad = 8;
+      if (b.width && b.height) svg.setAttribute("viewBox", `${(b.x - pad).toFixed(1)} ${(b.y - pad).toFixed(1)} ${(b.width + pad * 2).toFixed(1)} ${(b.height + pad * 2).toFixed(1)}`);
+    } catch (e) {}
+  });
+}
+window.addEventListener("hashchange", route);
+route();
+</script>

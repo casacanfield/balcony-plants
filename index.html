@@ -220,16 +220,16 @@ const PLANTS = {
   },
   inchplant: {
     kind: "pretty",
-    common: "Inch Plant",
-    sci: "Tradescantia zebrina",
+    common: "Purple Heart",
+    sci: "Tradescantia pallida",
     where: "East balcony · morning sun",
     art: { bloom: "inchBloom", rest: "inchRest" },
     bloomNote: "Small three-petal pink flowers at the tips",
-    restNote: "Silver-striped leaves all year",
+    restNote: "Deep purple leaves all year",
     water: { big: "Let the top dry, then soak", text: "Soak it when the top knuckle of soil is dry. It handles going dry much better than staying wet.", signs: ["Mushy stems at the base? It's too wet. Let it dry out longer."] },
-    sun: { big: "Bright, gentle light", text: "Morning sun is right, so the east balcony suits it. Harsh afternoon sun bleaches the stripes.", signs: ["Stripes fading and stems stretching? It needs more light.", "Crispy brown leaves? Too much sun, or it went too dry."] },
+    sun: { big: "Bright light, some sun", text: "Morning sun on the east balcony is fine. The more sun it gets, the deeper the purple, so it would also handle the west side.", signs: ["Turning green and stretching? It needs more light.", "Crispy brown leaves? It went too dry."] },
     soil: { mix: ["all-purpose soil", "a small pour of perlite"], text: "Nothing fancy." },
-    friends: "The spider plant or pothos, or other easy trailers like purple heart, string of hearts or creeping Jenny. They like the same watering.",
+    friends: "The spider plant, golden shrimp plant or pothos, or other easy trailers like the striped inch plant, string of hearts or creeping Jenny. They like the same watering.",
     foes: "Anything that likes soggy or acid soil, like the hydrangea, heather or ferns. Also succulents and cacti, which want it much drier.",
     feed: { big: "No.", text: "It already grows well." },
     pruneArt: [["inchSnip", "Any time"]],
@@ -252,7 +252,7 @@ const PLANTS = {
     water: { big: "Let the top dry, then soak", text: "Soak it when the top knuckle of soil is dry. Its thick roots store water, so it forgives forgetting." },
     sun: { big: "Bright, gentle light", text: "Morning sun is right, so the east balcony suits it." },
     soil: { mix: ["all-purpose soil", "a small pour of perlite"], text: "Nothing fancy." },
-    friends: "The inch plant or pothos, or other easy leafy plants like peace lily, prayer plant, ferns or ivy.",
+    friends: "The golden shrimp plant it already shares with, purple heart or pothos, or other easy leafy plants like peace lily, prayer plant, ferns or ivy.",
     foes: "Anything that likes soggy or acid soil, like the hydrangea, heather or ferns. Also succulents and cacti, which want it much drier.",
     feed: { big: "No.", text: "It doesn't need it." },
     pruneArt: [["spiderSnip", "Any time"]],
@@ -262,6 +262,29 @@ const PLANTS = {
       summer: "Trim runners only if mom's center looks pale or thin, or they're in your way.",
       fall: "Leave it alone.",
       winter: "Leave it alone.",
+    },
+  },
+  shrimpplant: {
+    kind: "pretty",
+    common: "Golden Shrimp Plant",
+    sci: "Pachystachys lutea",
+    where: "East balcony · shares a pot with the spider plants",
+    art: { bloom: "shrimpBloom", rest: "shrimpRest" },
+    bloomNote: "Yellow cones with little white flowers",
+    restNote: "Woody stems, leaves in pairs",
+    water: { big: "Lightly moist", text: "Water when the top of the soil feels dry. Give it less in winter.", signs: ["Leaves drooping? It's thirsty. It perks up within an hour of a drink."] },
+    sun: { big: "Bright light", text: "Morning sun is ideal, so the east balcony suits it. More light means more yellow cones.", signs: ["Few cones and long bare stems? It needs more light."] },
+    soil: { mix: ["all-purpose soil", "a handful of earthworm humus", "a small pour of perlite"], text: "Holds some water without going soggy." },
+    friends: "The spider plants it already shares with, purple heart or pothos. Also begonias, busy Lizzie (impatiens), coleus or ferns: easy plants that like steady water.",
+    foes: "Dry-loving plants like succulents, cacti, lavender or rosemary. Acid lovers like heather or hydrangea. And spreaders like bamboo.",
+    feed: { big: "Once a year.", text: "In spring, scratch a handful of earthworm humus into the top of the soil." },
+    pruneArt: [["shrimpSnip", "Spring"]],
+    pruneHow: "Snip just above a pair of leaves and two shoots grow from there. Only cut once, in spring.",
+    seasons: {
+      spring: "Once the cold has passed, cut leggy stems back by about half, just above a pair of leaves. Drop the clippings on the soil to rot in.",
+      summer: "Leave the yellow cones on until they brown. Bees visit the little white flowers.",
+      fall: "Leave it alone. It keeps flowering until the cold.",
+      winter: "It sulks below about 10°C and may drop leaves, and frost can kill the tops. Keep it against the wall. The roots usually regrow in spring.",
     },
   },
   pothos: {
@@ -275,7 +298,7 @@ const PLANTS = {
     water: { big: "Let it dry a bit, then soak", text: "Soak it when the top two knuckles of soil are dry. It droops a little when thirsty and perks right back up." },
     sun: { big: "Bright, gentle light", text: "The east balcony is fine. Harsh sun yellows the leaves." },
     soil: { mix: ["all-purpose soil", "a small pour of perlite"], text: "Nothing fancy." },
-    friends: "The Swiss cheese vine, spider plant or inch plant. Also philodendron, peace lily or ivy.",
+    friends: "The Swiss cheese vine, spider plant or purple heart. Also philodendron, peace lily or ivy.",
     foes: "Anything that likes soggy or acid soil, like the hydrangea, heather or ferns. Also succulents and cacti, which want it much drier.",
     feed: { big: "No.", text: "It doesn't need it." },
     pruneArt: [["pothosSnip", "Spring"]],
@@ -731,20 +754,16 @@ function brHead(cx, cy, fill) {
   return s;
 }
 
-// inch plant: trailing stems, pointed leaves with two silver stripes, three-petal flowers
+// purple heart: trailing stems, long pointed solid purple leaves, three-petal pink flowers
 function zebLeaf(bx, by, len, w, deg) {
-  const a = deg * Math.PI / 180, n = 14, L = [], R = [], S1 = [], S2 = [];
+  const a = deg * Math.PI / 180, n = 14, L = [], R = [];
   for (let i = 0; i <= n; i++) {
     const t = i / n, half = w * Math.pow(Math.sin(Math.PI * Math.min(1, t * 1.05)), .75) * (1 - .15 * t);
     L.push(rot(t * len, -half, bx, by, a)); R.push(rot(t * len, half, bx, by, a));
-    if (t > .12 && t < .85) { S1.push(rot(t * len, -half * .55, bx, by, a)); S2.push(rot(t * len, half * .55, bx, by, a)); }
   }
   const pts = L.concat(R.slice().reverse()).map(q => q.map(f1).join(" "));
-  const line = q => "M" + q.map(z => z.map(f1).join(" ")).join(" L");
   const tip = rot(len, 0, bx, by, a);
-  return `<path d="M${pts.join(" L")} Z" fill="var(--feed)" fill-opacity=".8" stroke="${INK}" stroke-width=".9" stroke-linejoin="round"/>
-    <path d="${line(S1)}" fill="none" stroke="#ffffff" stroke-width="${f1(w * .5)}" stroke-linecap="round" opacity=".75"/>
-    <path d="${line(S2)}" fill="none" stroke="#ffffff" stroke-width="${f1(w * .5)}" stroke-linecap="round" opacity=".75"/>
+  return `<path d="M${pts.join(" L")} Z" fill="var(--feed)" fill-opacity=".85" stroke="${INK}" stroke-width=".9" stroke-linejoin="round"/>
     <path d="M${f1(bx)} ${f1(by)} L${f1(tip[0])} ${f1(tip[1])}" stroke="${INK}" stroke-width=".6" opacity=".7"/>`;
 }
 function triFlower(x, y, r) {
@@ -1160,6 +1179,51 @@ function zebraLeaf(x, y, deg, L) {
   return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${deg})"><path d="M${f1(-L * .12)} 0 C${f1(-L * .12)} ${f1(-L * .5)} ${f1(-L * .06)} ${f1(-L * .85)} 0 ${f1(-L)} C${f1(L * .06)} ${f1(-L * .85)} ${f1(L * .12)} ${f1(-L * .5)} ${f1(L * .12)} 0 Z" fill="var(--leaf)" fill-opacity=".95" stroke="${INK}" stroke-width=".8"/>${bands}</g>`;
 }
 
+// golden shrimp plant: woody stems, opposite pairs of veined pointed leaves, upright cones of overlapping yellow bracts with white tube flowers
+function shrimpLeaf(x, y, len, deg) {
+  const a = deg * Math.PI / 180, w = len * .3;
+  let s = lanceLeaf(x, y, len, w, deg, 4);
+  [.3, .5, .7].forEach(t => [-1, 1].forEach(sd => {
+    const p0 = [x + Math.cos(a) * len * t, y + Math.sin(a) * len * t], b = a + sd * .55, v = w * .5 * (1 - .4 * t);
+    s += `<path d="M${f1(p0[0])} ${f1(p0[1])} l${f1(Math.cos(b) * v)} ${f1(Math.sin(b) * v)}" stroke="${INK}" stroke-width=".45" opacity=".55"/>`;
+  }));
+  return s;
+}
+function shrimpCone(x, y, h, lean = 0, tubes = true) {
+  let s = "";
+  const n = 9;
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1), cy = y - t * h, cx = x + lean * t, w = 9 * (1 - .55 * t), sd = i % 2 ? 1 : -1;
+    s += `<path d="M${f1(cx + sd * w * .3)} ${f1(cy)} C${f1(cx + sd * w * .3 - w)} ${f1(cy - 2)} ${f1(cx - w * .9)} ${f1(cy - 10)} ${f1(cx + sd * w * .2)} ${f1(cy - 13)} C${f1(cx + w * .9)} ${f1(cy - 10)} ${f1(cx + sd * w * .3 + w)} ${f1(cy - 2)} ${f1(cx + sd * w * .3)} ${f1(cy)} Z" fill="var(--yellow)" fill-opacity=".85" stroke="${INK}" stroke-width=".7" stroke-linejoin="round"/>`;
+    if (tubes && i > 1 && i < n - 1 && i % 2) {
+      const ex = cx + sd * (w + 9), ey = cy - 12;
+      s += `<path d="M${f1(cx + sd * w * .5)} ${f1(cy - 6)} Q${f1(cx + sd * (w + 4))} ${f1(cy - 8)} ${f1(ex)} ${f1(ey)}" fill="none" stroke="${INK}" stroke-width="3.4" stroke-linecap="round"/><path d="M${f1(cx + sd * w * .5)} ${f1(cy - 6)} Q${f1(cx + sd * (w + 4))} ${f1(cy - 8)} ${f1(ex)} ${f1(ey)}" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>` +
+        `<path d="M${f1(ex)} ${f1(ey)} l${f1(sd * 3)} -3 M${f1(ex)} ${f1(ey)} l${f1(sd * 4)} 1" stroke="${INK}" stroke-width=".6"/>`;
+    }
+  }
+  return s;
+}
+function shrimpBranch(p0, p1, bend, pairs, cone, opt = {}) {
+  const mx = (p0[0] + p1[0]) / 2, my = (p0[1] + p1[1]) / 2, a = Math.atan2(p1[1] - p0[1], p1[0] - p0[0]);
+  const c = [mx + Math.cos(a + Math.PI / 2) * bend, my + Math.sin(a + Math.PI / 2) * bend];
+  let s = stem(`M${f1(p0[0])} ${f1(p0[1])} Q${f1(c[0])} ${f1(c[1])} ${f1(p1[0])} ${f1(p1[1])}`, opt.w || 2.2, opt.color || "var(--leaf)");
+  pairs.forEach((t, i) => {
+    const [x, y] = qpt(p0, c, p1, t), ta = qtan(p0, c, p1, t) * 180 / Math.PI, L = (opt.L || 34) * (1 - t * .35);
+    s += shrimpLeaf(x, y, L, ta - 70 - i * 3) + shrimpLeaf(x, y, L, ta + 70 + i * 3);
+  });
+  if (cone) s += shrimpCone(p1[0], p1[1] + 2, opt.h || 44, opt.lean || 0, opt.tubes !== false);
+  return s;
+}
+function shrimpBush(fl) {
+  const W = { color: "#9b7a58", w: 2.6 };
+  return stem("M150 252 C149 230 151 214 150 196", 3, "#9b7a58") +
+    shrimpBranch([150, 200], [92, 108], -10, [.5, .82], fl, { ...W, h: 46 }) +
+    shrimpBranch([150, 200], [152, 84], 6, [.45, .8], fl, { ...W, h: 52 }) +
+    shrimpBranch([150, 200], [212, 112], 10, [.5, .82], fl, { ...W, h: 44 }) +
+    shrimpBranch([150, 226], [66, 186], -8, [.55], false, { ...W, w: 2, L: 30 }) +
+    shrimpBranch([150, 226], [236, 190], 8, [.55], false, { ...W, w: 2, L: 30 });
+}
+
 const PLATES = {
   hydrangeaBloom: () => plate("-26 0 330 284",
     stem("M140 254 C140 220 139 170 140 110") +
@@ -1266,17 +1330,17 @@ const PLATES = {
   inchBloom: () => plate("-26 0 330 284",
     inchClump(true) +
     note(219, 106, 222, 56, ["Small pink", "three-petal", "flowers"]) +
-    note(80, 176, 72, 140, ["Pointed leaves", "striped silver"], "end") +
+    note(80, 176, 72, 140, ["Long pointed", "purple leaves"], "end") +
     note(150, 70, 96, 30, ["Trailing stems"], "end") +
     `<text x="150" y="280" text-anchor="middle" class="pt">spring to fall, in flower</text>`,
-    "Textbook drawing of an inch plant in flower: trailing stems with pointed purple leaves striped silver and small three-petal pink flowers at the tips", "var(--feed-bg)"),
+    "Textbook drawing of a purple heart in flower: trailing stems with long pointed solid purple leaves and small three-petal pink flowers at the tips", "var(--feed-bg)"),
 
   inchRest: () => plate("-26 0 330 284",
     inchClump(false) +
-    note(80, 176, 72, 140, ["Silver stripes", "stay all year"], "end") +
+    note(80, 176, 72, 140, ["Purple all year,", "deeper in sun"], "end") +
     note(196, 252, 214, 266, ["Leaf joints: it", "roots and", "branches here"]) +
     `<text x="40" y="280" text-anchor="middle" class="pt">no flowers</text>`,
-    "Textbook drawing of an inch plant without flowers: trailing stems of silver-striped purple leaves, with the leaf joints marked", "var(--soil-bg)"),
+    "Textbook drawing of a purple heart without flowers: trailing stems of solid purple leaves, with the leaf joints marked", "var(--soil-bg)"),
 
   inchSnip: () => plate("-24 0 284 246",
     // 1: before
@@ -1301,7 +1365,40 @@ const PLATES = {
     `<text x="122" y="34" text-anchor="middle" class="pl"><tspan x="122">2. Two new</tspan><tspan x="122" dy="10.4">shoots grow</tspan></text>` +
     `<text x="216" y="34" text-anchor="middle" class="pl"><tspan x="216">3. The cut piece</tspan><tspan x="216" dy="10.4">roots in water</tspan></text>` +
     `<text x="120" y="242" text-anchor="middle" class="pt">any time · pinching back</text>`,
-    "Diagram: snip an inch plant stem just above a leaf joint; two new shoots grow from that joint, and the cut piece roots in water"),
+    "Diagram: snip a purple heart stem just above a leaf joint; two new shoots grow from that joint, and the cut piece roots in water"),
+
+  shrimpBloom: () => plate("-36 0 350 284",
+    shrimpBush(true) +
+    note(152, 50, 196, 22, ["Yellow bracts, not", "petals: they last", "for weeks"]) +
+    note(106, 64, 60, 40, ["Real flowers:", "little white tubes"], "end") +
+    note(186, 140, 238, 150, ["Leaves in", "opposite pairs"]) +
+    note(150, 236, 196, 252, ["Woody stems"]) +
+    `<text x="150" y="280" text-anchor="middle" class="pt">spring to fall, in flower</text>`,
+    "Textbook drawing of a golden shrimp plant in flower: upright cones of overlapping yellow bracts with small white tube flowers poking out, above woody stems with veined leaves in opposite pairs", "var(--sun-bg)"),
+
+  shrimpRest: () => plate("-36 0 350 284",
+    shrimpBush(false) +
+    note(120, 128, 64, 108, ["Pointed, veined", "leaves"], "end") +
+    note(186, 140, 238, 150, ["Leaves in", "opposite pairs"]) +
+    note(150, 236, 196, 252, ["Woody stems"]) +
+    `<text x="150" y="280" text-anchor="middle" class="pt">winter, resting</text>`,
+    "Textbook drawing of a golden shrimp plant out of flower: woody stems with pointed veined leaves in opposite pairs", "var(--friend-bg)"),
+
+  shrimpSnip: () => plate("-24 0 284 246",
+    // 1: leggy stem, cut halfway, just above a leaf pair
+    stem("M50 226 C50 190 48 150 50 70", 2.2, "#9b7a58") +
+    shrimpLeaf(50, 200, 24, -160) + shrimpLeaf(50, 200, 24, -20) + shrimpLeaf(49, 150, 22, -160) + shrimpLeaf(49, 150, 22, -20) + shrimpLeaf(50, 104, 18, -150) + shrimpLeaf(50, 104, 18, -30) +
+    `<path d="M28 130 L72 130" stroke="var(--foe)" stroke-width="1.6" stroke-dasharray="4 3"/>` +
+    // 2: two shoots from that pair, bushier
+    stem("M170 226 C170 200 169 172 170 152", 2.2, "#9b7a58") +
+    `<path d="M166 146 L174 146" stroke="${INK}" stroke-width="1.6"/>` +
+    shrimpLeaf(170, 200, 24, -160) + shrimpLeaf(170, 200, 24, -20) + shrimpLeaf(170, 152, 22, -165) + shrimpLeaf(170, 152, 22, -15) +
+    stem("M170 152 C160 136 154 122 150 104", 1.5, "var(--leaf)") + stem("M170 152 C180 136 186 122 190 104", 1.5, "var(--leaf)") +
+    shrimpLeaf(152, 116, 14, -150) + shrimpLeaf(152, 116, 14, -40) + shrimpLeaf(188, 116, 14, -140) + shrimpLeaf(188, 116, 14, -30) +
+    `<text x="50" y="34" text-anchor="middle" class="pl"><tspan x="50">1. Cut leggy stems</tspan><tspan x="50" dy="10.4">by half, just above</tspan><tspan x="50" dy="10.4">a pair of leaves</tspan></text>` +
+    `<text x="170" y="56" text-anchor="middle" class="pl"><tspan x="170">2. Two new shoots:</tspan><tspan x="170" dy="10.4">bushier, more flowers</tspan></text>` +
+    `<text x="120" y="242" text-anchor="middle" class="pt">spring, once the cold has passed</text>`,
+    "Diagram: in spring, cut leggy golden shrimp plant stems back by half just above a pair of leaves; two new shoots grow from there and the plant gets bushier"),
 
   spiderBloom: () => plate("-26 0 330 284",
     spiderTuft(150, 172, 1.2) +

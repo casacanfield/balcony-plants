@@ -111,3 +111,5 @@ function fitDrawings(root) {
 window.addEventListener("hashchange", route);
 route();
 </script>
+</body>
+</html>

@@ -23,12 +23,12 @@ function careNote(kind, title, inner) {
   return `<section class="note n-${kind}"><div class="ico" aria-hidden="true">${ICON[kind]}</div><div class="body"><h2>${title}${SWASH}</h2>${inner}</div></section>`;
 }
 
-function renderPlant(key, p) {
+function renderPlant(key, p, inPot) {
   const now = currentSeason();
-  document.title = p.common + " · Balcony Plant Cards";
+  if (!inPot) document.title = p.common + " · Balcony Plant Cards";
   const signs = list => (list || []).map(s => `<p class="sign">${esc(s)}</p>`).join("");
   return `
-  <a class="back" href="#all"><span aria-hidden="true">←</span> All plants</a>
+  ${inPot ? "" : `<a class="back" href="#all"><span aria-hidden="true">←</span> All plants</a>`}
   <header class="head">
     <span class="where">${esc(p.where)}</span>
     <h1>${esc(p.common)}</h1>
@@ -60,6 +60,25 @@ function renderPlant(key, p) {
     </div>
   </section>
 
+  ${inPot ? "" : `<p class="foot"><a href="#all">← Back to all plants</a></p>`}`;
+}
+
+// one tag per pot: #east-5 (see POTS) shows every plant in that pot, one after another
+function potName(id) { return "Pot " + id.replace(/^(\w)(\w*)-/, (m, a, b) => a.toUpperCase() + b + " "); }
+function renderPot(keys, id) {
+  const plants = keys.map(k => PLANTS[k]);
+  document.title = (id ? potName(id) : plants.map(p => p.common).join(" + ")) + " · Balcony Plant Cards";
+  if (!plants.length) return `
+  <a class="back" href="#all"><span aria-hidden="true">←</span> All plants</a>
+  <header class="head"><span class="where">${esc(potName(id))}</span><h1>Empty for now</h1><p class="sci">Nothing is growing in this pot at the moment.</p></header>`;
+  return `
+  <a class="back" href="#all"><span aria-hidden="true">←</span> All plants</a>
+  <header class="head">
+    <span class="where">${esc(id ? potName(id) + " · " + plants[0].where.split(" · ")[0] : plants[0].where.split(" · ")[0] + " · one pot")}</span>
+    <h1>In this pot</h1>
+    <p class="potlist">${keys.map((k, i) => `<button type="button" class="viewbtn" onclick="document.getElementById('pot-${k}').scrollIntoView({behavior:'smooth'})">${esc(plants[i].common)}</button>`).join('<span aria-hidden="true">+</span>')}</p>
+  </header>
+  ${keys.map((k, i) => `${WAVE}<article class="potplant" id="pot-${k}">${renderPlant(k, plants[i], true)}</article>`).join("")}
   <p class="foot"><a href="#all">← Back to all plants</a></p>`;
 }
 
@@ -90,10 +109,15 @@ function renderIndex() {
 }
 
 function route() {
-  const key = location.hash.slice(1).toLowerCase();
+  const key = decodeURIComponent(location.hash.slice(1)).toLowerCase();
+  const pot = [...new Set(key.split(/[+, ]+/).filter(k => PLANTS[k]))];
   const keys = Object.keys(PLANTS);
   const app = document.getElementById("app");
-  app.innerHTML = PLANTS[key] ? renderPlant(key, PLANTS[key])
+  const inPot = POTS[key] && POTS[key].filter(k => PLANTS[k]);
+  app.innerHTML = inPot ? (inPot.length === 1 ? renderPlant(inPot[0], PLANTS[inPot[0]]) : renderPot(inPot, key))
+    : PLANTS[key] ? renderPlant(key, PLANTS[key])
+    : pot.length > 1 ? renderPot(pot)
+    : pot.length === 1 ? renderPlant(pot[0], PLANTS[pot[0]])
     : key === "all" ? renderIndex()
     : keys.length === 1 ? renderPlant(keys[0], PLANTS[keys[0]]) : renderIndex();
   fitDrawings(app);

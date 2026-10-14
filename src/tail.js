@@ -105,7 +105,7 @@ function renderIndex() {
     ${toggles("Show as", VIEW, "setView", [["gallery", "Gallery"], ["list", "List"]])}
   </div>
   ${list.length ? `<nav class="index ${VIEW === "list" ? "as-list" : ""}">${list.map(([k, p]) => `<a href="#${k}"><span class="thumb">${thumb(p.art.bloom, p.kind)}</span><span class="names"><b>${esc(p.common)}</b><i>${esc(p.sci)}</i><small>${esc(p.where.split(" · ")[0])}</small></span></a>`).join("")}</nav>` : `<p class="sci">No plants match yet.</p>`}
-  <p class="foot">Updated October 8, 2026</p>`;
+  <p class="foot">Updated October 8, 2026 · <a href="edit.html">Edit pots</a></p>`;
 }
 
 function route() {
@@ -133,7 +133,9 @@ function fitDrawings(root) {
   });
 }
 window.addEventListener("hashchange", route);
-route();
+// which plants are in which pot lives in pots.json, so the pot editor (edit.html) can change it without touching code
+let POTS = {};
+fetch("pots.json", { cache: "no-cache" }).then(r => r.json()).then(p => { POTS = p; }).catch(() => {}).finally(route);
 </script>
 </body>
 </html>

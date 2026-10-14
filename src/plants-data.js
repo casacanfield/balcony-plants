@@ -445,26 +445,3 @@ const PLANTS = {
     },
   },
 };
-
-// Which plants are in which pot. Each NFC tag holds one pot's link, like .../balcony-plants/#east-5
-// When a plant moves, dies or gets added, change the list here. The tags never need rewriting.
-const POTS = {
-  "east-1": ["hydrangea"],
-  "east-2": ["heather"],
-  "east-3": ["urnplant"],
-  "east-4": ["flamingsword"],
-  "east-5": ["spiderplant", "shrimpplant"],
-  "east-6": ["inchplant"],
-  "east-7": ["pothos"],
-  "east-8": ["monstera"],
-  "east-9": ["ginger", "basil"],
-  "east-10": ["succulents"],
-  "west-1": ["tomato"],
-  "west-2": ["pepper"],
-  "west-3": ["basil"],
-  "west-4": ["strawberry"],
-  "west-5": ["greenonion"],
-  "west-6": ["lavender"],
-  "west-7": ["starjasmine"],
-  "west-8": ["morningglory"],
-};

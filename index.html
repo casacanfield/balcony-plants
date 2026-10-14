@@ -1944,10 +1944,14 @@ const PLATES = {
 // Pots view on the plant list: drag plants between pots (or tap a plant, then tap a pot), then Save.
 // Saving writes pots.json to the repo through GitHub, using a key that lives only in this browser,
 // so people scanning tags can look but not change anything.
-const POTS_API = "https://api.github.com/repos/casacanfield/balcony-plants/contents/pots.json";
+const REPO_API = "https://api.github.com/repos/casacanfield/balcony-plants/contents/";
 const TOKEN_KEY = "potEditorToken";
 const SITE = new URL("./", location.href).href;
-let potsDirty = false, picked = null, showConnect = false, potMsg = ["", ""];
+let potsDirty = false, picked = null, showConnect = false, showSetup = false, potMsg = ["", ""];
+// lock.json holds the GitHub key locked with crew's code (AES-GCM, key stretched from the code with PBKDF2),
+// so any phone can unlock saving with just the code. null = no code set up yet.
+let lockInfo;
+fetch("lock.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null).then(l => { lockInfo = l; redrawPots(); });
 
 const getToken = () => { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } };
 const setToken = t => { try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} };
@@ -1984,7 +1988,7 @@ function potEditorInner() {
     <div class="pots">${Object.keys(POTS).filter(id => potSide(id) === side).map(potCard).join("")}</div>
     <button type="button" class="addpot" data-add="${side}">+ New ${side} pot</button>
   </section>`).join("")}
-  ${getToken() && !showConnect ? `<p class="small">Saving is set up on this phone. <button type="button" id="disconnect">Turn off</button></p>` : connectPanel()}
+  ${getToken() && !showConnect ? `<p class="small">Unlocked on this phone. <button type="button" id="disconnect">Lock</button></p>` : lockInfo && !showSetup ? unlockPanel() : connectPanel()}
   <div class="bar"><span class="msg ${potMsg[1]}" id="msg" role="status">${esc(potMsg[0])}</span><button type="button" class="save" id="save"${potsDirty ? "" : " disabled"}>Save changes</button></div>`;
 }
 function renderPotEditor() { return `<div class="poteditor" id="poteditor">${potEditorInner()}</div>`; }
@@ -1992,20 +1996,48 @@ function redrawPots() { const el = document.getElementById("poteditor"); if (el)
 function say(text, tone) { potMsg = [text, tone || ""]; const m = document.getElementById("msg"); if (m) { m.textContent = text; m.className = "msg " + (tone || ""); } }
 function potsChanged() { potsDirty = true; potMsg = ["Not saved yet", ""]; redrawPots(); }
 
+function unlockPanel() {
+  return `<section class="connect" id="connect" aria-label="Unlock saving">
+    <h2>Unlock to save</h2>
+    <p>Type your pot code. This phone stays unlocked until you tap Lock.</p>
+    <div class="row"><input id="code" type="password" autocomplete="current-password" placeholder="Your pot code" aria-label="Pot code"><button type="button" id="unlock">Unlock</button></div>
+    <p class="small">Forgot the code? <button type="button" id="resetup">Set up a new one</button></p>
+  </section>`;
+}
+
 function connectPanel() {
-  return `<section class="connect" id="connect" aria-label="Set up saving">
-    <h2>Set up saving (one time)</h2>
-    <p>Saving needs a key from your GitHub account, so only you can change the pots. You do this once on each phone.</p>
+  return `<section class="connect" id="connect" aria-label="Set up a pot code">
+    <h2>Set up your pot code (one time)</h2>
+    <p>Saving needs a key from your GitHub account, so only you can change the pots. You make it once, lock it with a code, and after that any phone just needs the code.</p>
     <ol>
       <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub's new key page</a> and sign in.</li>
       <li>Name it "pot editor" and set the expiry as long as it allows.</li>
       <li>Under <b>Repository access</b>, choose <b>Only select repositories</b> and pick <b>balcony-plants</b>.</li>
       <li>Under <b>Permissions</b>, find <b>Contents</b> and set it to <b>Read and write</b>.</li>
       <li>Tap <b>Generate token</b>, copy it, and paste it below.</li>
+      <li>Choose a code you'll remember, at least 16 letters. Three or four random words with spaces works well. Pick your own, not ones from this page.</li>
     </ol>
-    <div class="row"><input id="token" type="password" autocomplete="off" placeholder="Paste the key here" aria-label="GitHub key"><button type="button" id="savetoken">Done</button></div>
-    <p class="small">The key stays on this phone. It can only change this plant site.</p>
+    <input id="token" type="password" autocomplete="off" placeholder="Paste the key here" aria-label="GitHub key">
+    <div class="row"><input id="newcode" type="text" autocomplete="new-password" placeholder="Choose your pot code" aria-label="New pot code"><button type="button" id="savetoken">Done</button></div>
+    <p class="small">The code locks the key, so it's safe to keep with the site. The key can only change this plant site.</p>
   </section>`;
+}
+
+// ---- the code lock ----
+const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function codeKey(code, salt) {
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(code), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 600000, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+}
+async function lockToken(token, code) {
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+  const data = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, await codeKey(code, salt), new TextEncoder().encode(token));
+  return { v: 1, salt: b64(salt), iv: b64(iv), data: b64(data) };
+}
+async function unlockToken(lock, code) {
+  const data = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(lock.iv) }, await codeKey(code, unb64(lock.salt)), unb64(lock.data));
+  return new TextDecoder().decode(data);
 }
 
 function dropPlant(from, key, i, to) {
@@ -2075,27 +2107,54 @@ document.addEventListener("click", e => {
   const pot = e.target.closest(".pot");
   if (pot && picked && !e.target.closest(".chip, a, button")) { dropPlant(picked.from, picked.key, picked.i, pot.dataset.pot); return; }
   if (e.target.id === "save") { savePots(); return; }
-  if (e.target.id === "savetoken") {
-    const t = document.getElementById("token").value.trim();
-    if (!t) return;
-    setToken(t); showConnect = false; redrawPots();
-    if (potsDirty) savePots(); else say("Saving is set up", "good");
-    return;
-  }
-  if (e.target.id === "disconnect") { setToken(""); redrawPots(); }
+  if (e.target.id === "savetoken") { setUpCode(); return; }
+  if (e.target.id === "unlock") { unlock(); return; }
+  if (e.target.id === "resetup") { showSetup = true; redrawPots(); return; }
+  if (e.target.id === "disconnect") { setToken(""); potMsg = ["Locked", ""]; redrawPots(); }
 });
 
-async function github(method, body) {
+async function unlock() {
+  const code = document.getElementById("code").value;
+  if (!code) return;
+  say("Unlocking…");
+  try {
+    setToken(await unlockToken(lockInfo, code));
+    showConnect = false; potMsg = ["Unlocked", "good"]; redrawPots();
+    if (potsDirty) savePots();
+  } catch (e) { say("That code didn't work. Try again.", "bad"); }
+}
+
+async function setUpCode() {
+  const token = document.getElementById("token").value.trim(), code = document.getElementById("newcode").value;
+  if (!token) return say("Paste the GitHub key first.", "bad");
+  if (code.length < 16) return say("Make the code at least 16 letters long. Three or four words works well.", "bad");
+  say("Setting up…");
+  setToken(token);
+  try {
+    const lock = await lockToken(token, code);
+    let sha;
+    try { sha = (await github("GET", null, "lock.json")).sha; } catch (e) { if (e.status !== 404) throw e; }
+    await github("PUT", { message: "Update the pot code lock", content: b64encode(JSON.stringify(lock) + "\n"), sha, branch: "main" }, "lock.json");
+    lockInfo = lock; showConnect = showSetup = false;
+    potMsg = ["Your code is set. Other phones just type it to unlock.", "good"]; redrawPots();
+    if (potsDirty) savePots();
+  } catch (e) {
+    setToken("");
+    say(e.status === 401 || e.status === 403 || e.status === 404 ? "GitHub didn't accept that key. Check it has Contents: Read and write for balcony-plants." : "Couldn't save. Check your connection and try again.", "bad");
+  }
+}
+
+async function github(method, body, file = "pots.json") {
   const headers = { Accept: "application/vnd.github+json", Authorization: "Bearer " + getToken() };
   if (body) headers["Content-Type"] = "application/json";
-  const r = await fetch(POTS_API + (method === "GET" ? "?ref=main&t=" + Date.now() : ""), { method, headers, body: body && JSON.stringify(body), cache: "no-store" });
+  const r = await fetch(REPO_API + file + (method === "GET" ? "?ref=main&t=" + Date.now() : ""), { method, headers, body: body && JSON.stringify(body), cache: "no-store" });
   if (!r.ok) throw Object.assign(new Error("GitHub " + r.status), { status: r.status });
   return r.json();
 }
 
 async function savePots() {
   if (!getToken()) {
-    showConnect = true; potMsg = ["Saving needs a one-time setup, just below.", ""]; redrawPots();
+    showConnect = true; potMsg = [lockInfo ? "Type your pot code just below to save." : "Saving needs a one-time setup, just below.", ""]; redrawPots();
     document.getElementById("connect").scrollIntoView({ behavior: "smooth" });
     return;
   }
@@ -2108,7 +2167,7 @@ async function savePots() {
   } catch (e) {
     document.getElementById("save").disabled = false;
     if (e.status === 401 || e.status === 403 || e.status === 404) {
-      setToken(""); showConnect = true; potMsg = ["GitHub didn't accept the key. It may have expired. Set it up again below.", "bad"]; redrawPots();
+      setToken(""); showConnect = true; showSetup = true; potMsg = ["GitHub didn't accept the key. It may have expired. Set it up again below.", "bad"]; redrawPots();
     } else say("Couldn't save. Check your connection and try again.", "bad");
   }
 }

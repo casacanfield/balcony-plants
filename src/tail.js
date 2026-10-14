@@ -85,9 +85,9 @@ function renderPot(keys, id) {
 const KIND_WASH = { food: "var(--sun-bg)", pretty: "var(--friend-bg)" };
 function thumb(id, kind) { BARE = true; WASH = KIND_WASH[kind]; const s = art(id); BARE = false; WASH = null; return s; }
 let VIEW = "gallery", KIND = "all", SIDE = "all";
-try { VIEW = localStorage.getItem("plantView") || "gallery"; KIND = localStorage.getItem("plantKind") || "all"; SIDE = localStorage.getItem("plantSide") || "all"; } catch (e) {}
+try { VIEW = localStorage.getItem("plantView") || "gallery"; if (VIEW === "pots") VIEW = "gallery"; KIND = localStorage.getItem("plantKind") || "all"; SIDE = localStorage.getItem("plantSide") || "all"; } catch (e) {}
 function remember(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-function setView(v) { VIEW = v; remember("plantView", v); route(); }
+function setView(v) { VIEW = v; if (v !== "pots") remember("plantView", v); route(); }
 function setKind(v) { KIND = v; remember("plantKind", v); route(); }
 function setSide(v) { SIDE = v; remember("plantSide", v); route(); }
 const sideOf = p => p.where.toLowerCase().startsWith("west") ? "west" : "east";
@@ -101,11 +101,11 @@ function renderIndex() {
   <header class="head"><span class="where">Both balconies</span><h1>Balcony plants</h1><p class="sci">Tap a plant, or scan its tag.</p></header>
   <div class="filters">
     ${toggles("Balcony", SIDE, "setSide", [["all", "Both"], ["east", "East"], ["west", "West"]])}
-    ${toggles("Type", KIND, "setKind", [["all", "All"], ["food", `<i class="dot" style="background:var(--sun-bg)"></i>Food & herbs`], ["pretty", `<i class="dot" style="background:var(--friend-bg)"></i>Flowers & leafy`]])}
-    ${toggles("Show as", VIEW, "setView", [["gallery", "Gallery"], ["list", "List"]])}
+    ${VIEW === "pots" ? "" : toggles("Type", KIND, "setKind", [["all", "All"], ["food", `<i class="dot" style="background:var(--sun-bg)"></i>Food & herbs`], ["pretty", `<i class="dot" style="background:var(--friend-bg)"></i>Flowers & leafy`]])}
+    ${toggles("Show as", VIEW, "setView", [["gallery", "Gallery"], ["list", "List"], ["pots", "Pots"]])}
   </div>
-  ${list.length ? `<nav class="index ${VIEW === "list" ? "as-list" : ""}">${list.map(([k, p]) => `<a href="#${k}"><span class="thumb">${thumb(p.art.bloom, p.kind)}</span><span class="names"><b>${esc(p.common)}</b><i>${esc(p.sci)}</i><small>${esc(p.where.split(" · ")[0])}</small></span></a>`).join("")}</nav>` : `<p class="sci">No plants match yet.</p>`}
-  <p class="foot">Updated October 8, 2026 · <a href="edit.html">Edit pots</a></p>`;
+  ${VIEW === "pots" ? renderPotEditor() : list.length ? `<nav class="index ${VIEW === "list" ? "as-list" : ""}">${list.map(([k, p]) => `<a href="#${k}"><span class="thumb">${thumb(p.art.bloom, p.kind)}</span><span class="names"><b>${esc(p.common)}</b><i>${esc(p.sci)}</i><small>${esc(p.where.split(" · ")[0])}</small></span></a>`).join("")}</nav>` : `<p class="sci">No plants match yet.</p>`}
+  <p class="foot">Updated October 8, 2026</p>`;
 }
 
 function route() {
@@ -119,6 +119,7 @@ function route() {
     : pot.length > 1 ? renderPot(pot)
     : pot.length === 1 ? renderPlant(pot[0], PLANTS[pot[0]])
     : key === "all" ? renderIndex()
+    : key === "pots" ? (VIEW = "pots", renderIndex())
     : keys.length === 1 ? renderPlant(keys[0], PLANTS[keys[0]]) : renderIndex();
   fitDrawings(app);
   window.scrollTo(0, 0);

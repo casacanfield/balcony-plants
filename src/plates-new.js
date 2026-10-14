@@ -627,6 +627,11 @@ function shrimpBush(fl) {
     shrimpBranch([150, 226], [236, 190], 8, [.55], false, { ...W, w: 2, L: 30 });
 }
 
+// one pot for a single succulent, rim at y 236
+function succPot() {
+  return `<path d="M96 236 L108 266 L192 266 L204 236 Z" fill="var(--soil-bg)" stroke="${INK}" stroke-width="1.2"/><path d="M90 236 L210 236" stroke="${INK}" stroke-width="2"/>`;
+}
+
 const PLATES = {
   hydrangeaBloom: () => plate("-26 0 330 284",
     stem("M140 254 C140 220 139 170 140 110") +
@@ -1144,6 +1149,40 @@ const PLATES = {
     note(272, 200, 280, 166, ["Zebra", "plant"]) +
     `<text x="150" y="280" text-anchor="middle" class="pt">all year, east balcony box</text>`,
     "Textbook drawing of the succulent box: aeonium rosettes on woody stems, a pine-tree crassula, pale lilac ghost plant rosettes, freckled ox tongue leaves and a white-striped zebra plant", "var(--friend-bg)"),
+
+  aeoniumPlant: () => plate("-26 0 330 284",
+    succPot() +
+    stem("M150 234 C148 200 154 170 150 120", 3, "#9b8a74") + stem("M150 196 Q122 184 112 156", 2.2, "#9b8a74") + stem("M151 178 Q178 164 190 140", 2, "#9b8a74") +
+    rosetteSide(150, 122, 44, "var(--leaf)", "var(--pink)") + rosetteSide(112, 158, 28, "var(--leaf)", "var(--pink)") + rosetteSide(190, 142, 24, "var(--leaf)", "var(--pink)") +
+    note(150, 100, 210, 56, ["Rosettes on", "bare woody stems"]) +
+    note(150, 200, 70, 214, ["Old leaves drop,", "stem goes bare"], "end") +
+    `<text x="150" y="282" text-anchor="middle" class="pt">grows in the cool months, rests in summer heat</text>`,
+    "Drawing of an aeonium: flat leafy rosettes on top of bare, branching woody stems", "var(--friend-bg)"),
+  crassulaPlant: () => plate("-26 0 330 284",
+    succPot() + pineCrassula(136, 234, 150) + pineCrassula(170, 234, 110) +
+    note(140, 96, 206, 60, ["Tiny pointed leaves", "in rows: a mini", "pine tree"]) +
+    `<text x="150" y="282" text-anchor="middle" class="pt">pine tree crassula, all year</text>`,
+    "Drawing of a pine tree crassula: upright woody stems covered in rows of small pointed leaves", "var(--friend-bg)"),
+  ghostPlant: () => plate("-26 0 330 284",
+    stem("M128 232 C112 222 96 226 84 246", 1.8, "#9b8a74") + stem("M172 232 C188 222 206 230 216 252", 1.8, "#9b8a74") + succPot() +
+    rosetteSide(150, 230, 40, "#d9c7e4", "var(--feed)") + rosetteSide(84, 246, 22, "#d9c7e4", "var(--feed)") + rosetteSide(216, 252, 20, "#d9c7e4", "var(--feed)") +
+    note(150, 196, 210, 150, ["Chalky lilac-grey", "rosettes"]) +
+    note(84, 230, 40, 196, ["Trails over", "the edge"], "end") +
+    `<text x="150" y="282" text-anchor="middle" class="pt">pinker in sun, greyer in shade</text>`,
+    "Drawing of a ghost plant: pale lilac-grey rosettes on stems trailing over the edge of the pot", "var(--friend-bg)"),
+  oxtonguePlant: () => plate("-26 0 330 284",
+    succPot() + [[-34, 74], [-14, 96], [6, 106], [26, 90], [44, 70]].map(([d, L]) => oxTongue(150, 236, d, L)).join("") +
+    note(152, 150, 200, 110, ["Thick leaves", "in two rows"]) +
+    note(122, 190, 64, 160, ["White freckles"], "end") +
+    `<text x="150" y="282" text-anchor="middle" class="pt">ox tongue, all year</text>`,
+    "Drawing of an ox tongue gasteria: thick dark green tongue-shaped leaves with white freckles, fanned in two rows", "var(--friend-bg)"),
+  zebraPlant: () => plate("-26 0 330 284",
+    succPot() + [-40, -26, -13, 0, 13, 26, 40].map((d, i) => zebraLeaf(150, 236, d, 70 + (i % 2) * 18 + (i === 3 ? 20 : 0))).join("") +
+    zebraLeaf(116, 236, -28, 40) + zebraLeaf(122, 236, -10, 46) +
+    note(150, 160, 212, 120, ["Stiff pointed leaves", "with white stripes"]) +
+    note(118, 214, 60, 186, ["Pups at", "the base"], "end") +
+    `<text x="150" y="282" text-anchor="middle" class="pt">zebra plant, all year</text>`,
+    "Drawing of a zebra plant: a tight clump of stiff, pointed dark green leaves banded with white stripes, with small pups at the base", "var(--friend-bg)"),
 
   succSnip: () => plate("-24 0 284 246",
     `<path d="M20 200 L220 200" stroke="var(--soil)" stroke-width="3"/>` +

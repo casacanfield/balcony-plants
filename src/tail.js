@@ -23,12 +23,12 @@ function careNote(kind, title, inner) {
   return `<section class="note n-${kind}"><div class="ico" aria-hidden="true">${ICON[kind]}</div><div class="body"><h2>${title}${SWASH}</h2>${inner}</div></section>`;
 }
 
-function renderPlant(key, p) {
+function renderPlant(key, p, inPot) {
   const now = currentSeason();
-  document.title = p.common + " · Balcony Plant Cards";
+  if (!inPot) document.title = p.common + " · Balcony Plant Cards";
   const signs = list => (list || []).map(s => `<p class="sign">${esc(s)}</p>`).join("");
   return `
-  <a class="back" href="#all"><span aria-hidden="true">←</span> All plants</a>
+  ${inPot ? "" : `<a class="back" href="#all"><span aria-hidden="true">←</span> All plants</a>`}
   <header class="head">
     <span class="where">${esc(p.where)}</span>
     <h1>${esc(p.common)}</h1>
@@ -60,6 +60,21 @@ function renderPlant(key, p) {
     </div>
   </section>
 
+  ${inPot ? "" : `<p class="foot"><a href="#all">← Back to all plants</a></p>`}`;
+}
+
+// one tag per pot: #spiderplant+shrimpplant shows every plant in that pot, one after another
+function renderPot(keys) {
+  const plants = keys.map(k => PLANTS[k]);
+  document.title = plants.map(p => p.common).join(" + ") + " · Balcony Plant Cards";
+  return `
+  <a class="back" href="#all"><span aria-hidden="true">←</span> All plants</a>
+  <header class="head">
+    <span class="where">${esc(plants[0].where.split(" · ")[0])} · one pot</span>
+    <h1>In this pot</h1>
+    <p class="potlist">${keys.map((k, i) => `<button type="button" class="viewbtn" onclick="document.getElementById('pot-${k}').scrollIntoView({behavior:'smooth'})">${esc(plants[i].common)}</button>`).join('<span aria-hidden="true">+</span>')}</p>
+  </header>
+  ${keys.map((k, i) => `${WAVE}<article class="potplant" id="pot-${k}">${renderPlant(k, plants[i], true)}</article>`).join("")}
   <p class="foot"><a href="#all">← Back to all plants</a></p>`;
 }
 
@@ -90,10 +105,13 @@ function renderIndex() {
 }
 
 function route() {
-  const key = location.hash.slice(1).toLowerCase();
+  const key = decodeURIComponent(location.hash.slice(1)).toLowerCase();
+  const pot = [...new Set(key.split(/[+, ]+/).filter(k => PLANTS[k]))];
   const keys = Object.keys(PLANTS);
   const app = document.getElementById("app");
   app.innerHTML = PLANTS[key] ? renderPlant(key, PLANTS[key])
+    : pot.length > 1 ? renderPot(pot)
+    : pot.length === 1 ? renderPlant(pot[0], PLANTS[pot[0]])
     : key === "all" ? renderIndex()
     : keys.length === 1 ? renderPlant(keys[0], PLANTS[keys[0]]) : renderIndex();
   fitDrawings(app);

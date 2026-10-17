@@ -5,7 +5,7 @@
 const REPO_API = "https://api.github.com/repos/casacanfield/balcony-plants/contents/";
 const TOKEN_KEY = "potEditorToken";
 const SITE = new URL("./", location.href).href;
-let potsDirty = false, picked = null, showConnect = false, showSetup = false, potMsg = ["", ""];
+let potsDirty = false, picked = null, addingTo = null, showConnect = false, showSetup = false, potMsg = ["", ""];
 // lock.json holds the GitHub key locked with crew's code (AES-GCM, key stretched from the code with PBKDF2),
 // so any phone can unlock saving with just the code. null = no code set up yet.
 let lockInfo;
@@ -31,15 +31,22 @@ function potCard(id) {
   const list = POTS[id];
   return `<section class="pot" data-pot="${id}" aria-label="${potLabel(id)}">
     <header><h3>${potLabel(id)}</h3>${list.length ? "" : `<button type="button" class="del" data-del="${id}">Remove pot</button>`}</header>
-    <div class="plants">${list.length ? list.map((k, i) => potChip(k, id, i)).join("") : `<span class="empty">Empty. Drop a plant here.</span>`}</div>
+    <div class="plants">${list.length ? list.map((k, i) => potChip(k, id, i)).join("") : `<span class="empty">Empty. Drop a plant here, or tap +.</span>`}<button type="button" class="plus" data-plus="${id}" aria-expanded="${addingTo === id}" aria-label="Add plants to ${potLabel(id)}">${addingTo === id ? "Done" : "+"}</button></div>
+    ${addingTo === id ? addPicker(id) : ""}
     <a class="link" href="#${id}">Tag link: ${esc((SITE + "#" + id).replace(/^https?:\/\//, ""))}</a>
   </section>`;
+}
+
+// the + in a pot opens this list of every plant not already in it; tap one to add it
+function addPicker(id) {
+  const keys = Object.keys(PLANTS).filter(k => !POTS[id].includes(k)).sort((a, b) => PLANTS[a].common.localeCompare(PLANTS[b].common));
+  return `<div class="picker" aria-label="Plants to add">${keys.length ? keys.map(k => `<button type="button" class="pick ${PLANTS[k].kind === "food" ? "food" : ""}" data-pick="${k}">+ ${esc(PLANTS[k].common)}</button>`).join("") : `<span class="empty">Every plant is already in this pot.</span>`}</div>`;
 }
 
 function potEditorInner() {
   const sides = [["east", "East balcony"], ["west", "West balcony"]].filter(([s]) => SIDE === "all" || SIDE === s);
   return `
-  <p class="hint">Drag a plant into a pot, or tap a plant and then tap a pot. Tap × to take a plant out. Then tap Save.</p>
+  <p class="hint">Tap + on a pot to add plants, or drag a plant into a pot. Tap × to take a plant out. Then tap Save.</p>
   <div class="palette" aria-label="All plants">${Object.keys(PLANTS).sort((a, b) => PLANTS[a].common.localeCompare(PLANTS[b].common)).map(k => potChip(k, "palette", -1)).join("")}</div>
   ${sides.map(([side, title]) => `<section class="side" aria-label="${title}">
     <h2>${title}</h2>
@@ -153,6 +160,10 @@ document.addEventListener("click", e => {
   if (!e.target.closest("#poteditor")) return;
   const x = e.target.closest(".x");
   if (x) { const c = x.closest(".chip"); POTS[c.dataset.from].splice(+c.dataset.i, 1); picked = null; potsChanged(); return; }
+  const plus = e.target.closest("[data-plus]");
+  if (plus) { addingTo = addingTo === plus.dataset.plus ? null : plus.dataset.plus; picked = null; document.body.classList.remove("wantsdrop"); redrawPots(); return; }
+  const pick = e.target.closest("[data-pick]");
+  if (pick) { POTS[addingTo].push(pick.dataset.pick); potsChanged(); return; }
   const del = e.target.closest("[data-del]");
   if (del) { delete POTS[del.dataset.del]; potsChanged(); return; }
   const add = e.target.closest("[data-add]");

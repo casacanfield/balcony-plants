@@ -84,10 +84,10 @@ function renderPot(keys, id) {
 
 const KIND_WASH = { food: "var(--sun-bg)", pretty: "var(--friend-bg)" };
 function thumb(id, kind) { BARE = true; WASH = KIND_WASH[kind]; const s = art(id); BARE = false; WASH = null; return s; }
-let VIEW = "gallery", KIND = "all", SIDE = "all";
-try { VIEW = localStorage.getItem("plantView") || "gallery"; if (VIEW === "pots") VIEW = "gallery"; KIND = localStorage.getItem("plantKind") || "all"; SIDE = localStorage.getItem("plantSide") || "all"; } catch (e) {}
+let VIEW = "list", KIND = "all", SIDE = "all";
+try { VIEW = localStorage.getItem("plantShowAs") || "list"; if (VIEW === "pots") VIEW = "list"; KIND = localStorage.getItem("plantKind") || "all"; SIDE = localStorage.getItem("plantSide") || "all"; } catch (e) {}
 function remember(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-function setView(v) { VIEW = v; if (v !== "pots") remember("plantView", v); route(); }
+function setView(v) { VIEW = v; if (v !== "pots") remember("plantShowAs", v); route(); }
 function setKind(v) { KIND = v; remember("plantKind", v); route(); }
 function setSide(v) { SIDE = v; remember("plantSide", v); route(); }
 const sideOf = p => p.where.toLowerCase().startsWith("west") ? "west" : "east";
